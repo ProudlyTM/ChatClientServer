@@ -1,8 +1,10 @@
 # ChatClientServer
 Chat Client Server is a lightweight .NET chat client/server combined app, which can work both locally and remotely
 
-<img src="https://github.com/ProudlyTM/ChatClientServer/blob/main/Screenshots/client_server_main_window.png" alt="Client/Server Main Window" width="300"></img>
-<img src="https://github.com/ProudlyTM/ChatClientServer/blob/main/Screenshots/client_server_chat_window.png" alt="Client/Server Chat Window" width="600" height="442.19"></img>
+<p align="center">
+	<img src="https://github.com/ProudlyTM/ChatClientServer/blob/main/Screenshots/client_server_main_window.png" alt="Client/Server Main Window"></img><br/><br/>
+	<img src="https://github.com/ProudlyTM/ChatClientServer/blob/main/Screenshots/client_server_chat_window.png" alt="Client/Server Chat Window"></img>
+</p>
 
 ## Requirements to run the app
 * .NET Framework 4.7.2
