@@ -43,11 +43,11 @@
             this.comboBoxSrvIPSel = new System.Windows.Forms.ComboBox();
             this.lblSrvIP = new System.Windows.Forms.Label();
             this.tabPage2 = new System.Windows.Forms.TabPage();
+            this.richTextBoxChatInput = new System.Windows.Forms.RichTextBox();
             this.textBoxChatScreen = new System.Windows.Forms.RichTextBox();
             this.buttonSendMsg = new System.Windows.Forms.Button();
             this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
             this.backgroundWorker2 = new System.ComponentModel.BackgroundWorker();
-            this.textBoxChatInput = new System.Windows.Forms.TextBox();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.groupBox1.SuspendLayout();
@@ -60,6 +60,7 @@
             this.tabControl1.Controls.Add(this.tabPage1);
             this.tabControl1.Controls.Add(this.tabPage2);
             this.tabControl1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tabControl1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.tabControl1.ItemSize = new System.Drawing.Size(115, 30);
             this.tabControl1.Location = new System.Drawing.Point(0, 0);
             this.tabControl1.Name = "tabControl1";
@@ -103,10 +104,11 @@
             this.textBoxClientPort.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.textBoxClientPort.Location = new System.Drawing.Point(216, 26);
+            this.textBoxClientPort.MaxLength = 5;
             this.textBoxClientPort.Name = "textBoxClientPort";
             this.textBoxClientPort.Size = new System.Drawing.Size(59, 26);
             this.textBoxClientPort.TabIndex = 5;
-            this.textBoxClientPort.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textBoxClientPort_KeyPress);
+            this.textBoxClientPort.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textBoxClientIPPort_KeyPress);
             // 
             // lblPort
             // 
@@ -123,6 +125,7 @@
             this.textBoxClientIP.Name = "textBoxClientIP";
             this.textBoxClientIP.Size = new System.Drawing.Size(141, 26);
             this.textBoxClientIP.TabIndex = 4;
+            this.textBoxClientIP.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textBoxClientIPPort_KeyPress);
             // 
             // btnConnect
             // 
@@ -218,7 +221,7 @@
             // 
             // tabPage2
             // 
-            this.tabPage2.Controls.Add(this.textBoxChatInput);
+            this.tabPage2.Controls.Add(this.richTextBoxChatInput);
             this.tabPage2.Controls.Add(this.textBoxChatScreen);
             this.tabPage2.Controls.Add(this.buttonSendMsg);
             this.tabPage2.Location = new System.Drawing.Point(4, 34);
@@ -229,11 +232,24 @@
             this.tabPage2.Text = "Chat";
             this.tabPage2.UseVisualStyleBackColor = true;
             // 
+            // richTextBoxChatInput
+            // 
+            this.richTextBoxChatInput.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.richTextBoxChatInput.Location = new System.Drawing.Point(9, 362);
+            this.richTextBoxChatInput.Multiline = false;
+            this.richTextBoxChatInput.Name = "richTextBoxChatInput";
+            this.richTextBoxChatInput.Size = new System.Drawing.Size(245, 45);
+            this.richTextBoxChatInput.TabIndex = 6;
+            this.richTextBoxChatInput.Text = "";
+            this.richTextBoxChatInput.KeyDown += new System.Windows.Forms.KeyEventHandler(this.richTextBoxChatInput_KeyDown);
+            // 
             // textBoxChatScreen
             // 
             this.textBoxChatScreen.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.textBoxChatScreen.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.textBoxChatScreen.Location = new System.Drawing.Point(9, 7);
             this.textBoxChatScreen.Name = "textBoxChatScreen";
             this.textBoxChatScreen.ReadOnly = true;
@@ -245,12 +261,13 @@
             // buttonSendMsg
             // 
             this.buttonSendMsg.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonSendMsg.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.buttonSendMsg.Location = new System.Drawing.Point(207, 362);
+            this.buttonSendMsg.Font = new System.Drawing.Font("Microsoft Sans Serif", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.buttonSendMsg.Location = new System.Drawing.Point(260, 362);
             this.buttonSendMsg.Name = "buttonSendMsg";
-            this.buttonSendMsg.Size = new System.Drawing.Size(103, 45);
+            this.buttonSendMsg.Size = new System.Drawing.Size(49, 45);
             this.buttonSendMsg.TabIndex = 2;
-            this.buttonSendMsg.Text = "SEND";
+            this.buttonSendMsg.Text = "↵";
+            this.buttonSendMsg.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             this.buttonSendMsg.UseVisualStyleBackColor = true;
             this.buttonSendMsg.Click += new System.EventHandler(this.buttonSendMsg_Click);
             // 
@@ -261,14 +278,6 @@
             // backgroundWorker2
             // 
             this.backgroundWorker2.DoWork += new System.ComponentModel.DoWorkEventHandler(this.backgroundWorker2_DoWork);
-            // 
-            // textBoxChatInput
-            // 
-            this.textBoxChatInput.Location = new System.Drawing.Point(9, 365);
-            this.textBoxChatInput.Multiline = true;
-            this.textBoxChatInput.Name = "textBoxChatInput";
-            this.textBoxChatInput.Size = new System.Drawing.Size(192, 39);
-            this.textBoxChatInput.TabIndex = 5;
             // 
             // Form1
             // 
@@ -288,7 +297,6 @@
             this.groupBox2.ResumeLayout(false);
             this.groupBox2.PerformLayout();
             this.tabPage2.ResumeLayout(false);
-            this.tabPage2.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -313,7 +321,7 @@
         private System.Windows.Forms.TextBox textBoxClientPort;
         private System.Windows.Forms.Button buttonSendMsg;
         private System.Windows.Forms.RichTextBox textBoxChatScreen;
-        private System.Windows.Forms.TextBox textBoxChatInput;
+        private System.Windows.Forms.RichTextBox richTextBoxChatInput;
     }
 }
 

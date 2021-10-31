@@ -10,11 +10,11 @@ namespace ChatClientServer
 {
     public partial class Form1 : Form
     {
-        public string srvPort;
-        public string receive;
-        public string textToSend;
-        public StreamReader STR;
-        public StreamWriter STW;
+        private string srvPort;
+        private string receive;
+        private string textToSend;
+        private StreamReader STR;
+        private StreamWriter STW;
         private TcpClient client;
 
         public void GetLocalIPs()
@@ -85,7 +85,7 @@ namespace ChatClientServer
             }
             else
             {
-                MessageBox.Show("Sending Failed");
+                MessageBox.Show("Sending Failed", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
 
             backgroundWorker2.CancelAsync();
@@ -111,7 +111,7 @@ namespace ChatClientServer
             btnSrvStart.Enabled = false;
             textBoxClientIP.Enabled = false;
             textBoxClientPort.Enabled = false;
-            MessageBox.Show("Server started on port: " + srvPort + "\nYou can use any of the IPs listed in the IP menu to connect", "Success",
+            MessageBox.Show("Server started on port: " + srvPort + "\nYou can use your IP from a common subnet in your network to connect", "Success",
                 MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
@@ -123,7 +123,7 @@ namespace ChatClientServer
             {
                 IPEndPoint ipEndPoint = new IPEndPoint(IPAddress.Parse(textBoxClientIP.Text), int.Parse(textBoxClientPort.Text));
                 client.Connect(ipEndPoint);
-                MessageBox.Show("Connected to server\n\n" + textBoxClientIP.Text.ToString() + ":" + textBoxClientPort.Text.ToString(), "Success", 
+                MessageBox.Show("Connected to server\n\n" + textBoxClientIP.Text.ToString() + ":" + textBoxClientPort.Text.ToString(), "Success",
                     MessageBoxButtons.OK, MessageBoxIcon.Information);
                 textBoxClientIP.Enabled = false;
                 textBoxClientPort.Enabled = false;
@@ -151,15 +151,13 @@ namespace ChatClientServer
             {
                 if (client.Connected)
                 {
-                    if (textBoxChatInput.Text != "")
+                    if (richTextBoxChatInput.Text != "")
                     {
-                        textToSend = textBoxChatInput.Text;
-                        // TODO:
-                        // Send message on "Enter"
+                        textToSend = richTextBoxChatInput.Text;
                         backgroundWorker2.RunWorkerAsync();
                     }
 
-                    textBoxChatInput.Text = "";
+                    richTextBoxChatInput.Text = "";
                 }
                 else
                 {
@@ -171,7 +169,7 @@ namespace ChatClientServer
             catch
             {
                 MessageBox.Show("Failed to send message\n\nNot connected to server/client or lost connection", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                textBoxChatInput.Text = "";
+                richTextBoxChatInput.Text = "";
             }
         }
 
@@ -180,18 +178,36 @@ namespace ChatClientServer
             BeginInvoke(new Action(() => { comboBoxSrvIPSel.Select(0, 0); }));
         }
 
+        private void richTextBoxChatInput_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                if (richTextBoxChatInput.Text != "")
+                {
+                    buttonSendMsg.PerformClick();
+                    e.SuppressKeyPress = true;
+                }
+            }
+        }
+
         private void textBoxChatScreen_TextChanged(object sender, EventArgs e)
         {
             // Set the current caret position to the end
             textBoxChatScreen.SelectionStart = textBoxChatScreen.Text.Length;
-            // Scroll it automatically
+            // Scroll the chat automatically
             textBoxChatScreen.ScrollToCaret();
         }
 
-        private void textBoxClientPort_KeyPress(object sender, KeyPressEventArgs e)
+        private void textBoxClientIPPort_KeyPress(object sender, KeyPressEventArgs e)
         {
-            // TODO:
-            // Perform validations and click button "CONNECT" on "Enter"
+            if (e.KeyChar == (char)Keys.Enter)
+            {
+                if (textBoxClientIP.Text != "" && textBoxClientPort.Text != "")
+                {
+                    e.Handled = true;
+                    btnConnect.PerformClick();
+                }
+            }
         }
     }
 }
