@@ -17,9 +17,23 @@ namespace ChatClientServer
         private StreamWriter STW;
         private TcpClient client;
 
+        private void ExitApplication(object sender, EventArgs e) { Application.Exit(); }
+
+        protected override void OnFormClosing(FormClosingEventArgs e)
+        {
+            if (e.CloseReason == CloseReason.WindowsShutDown || e.CloseReason == CloseReason.ApplicationExitCall) return;
+            else
+            {
+                e.Cancel = true;
+                Hide();
+                notifyIcon1.ShowBalloonTip(1000);
+            }
+        }
+
         public void GetLocalIPs()
         {
             var host = Dns.GetHostEntry(Dns.GetHostName());
+
             foreach (var ip in host.AddressList)
             {
                 if (ip.AddressFamily == AddressFamily.InterNetwork)
@@ -46,9 +60,12 @@ namespace ChatClientServer
         private void Form1_Load(object sender, EventArgs e)
         {
             GetLocalIPs();
+            ContextMenu contextMenu = new ContextMenu();
             comboBoxSrvIPSel.SelectedIndex = 0;
             srvPort = GetRandomUnusedPort().ToString();
             lblSrvPort.Text += srvPort;
+            notifyIcon1.ContextMenu = contextMenu;
+            contextMenu.MenuItems.Add("Exit", ExitApplication);
         }
 
         private void backgroundWorker1_DoWork(object sender, DoWorkEventArgs e)
@@ -61,6 +78,11 @@ namespace ChatClientServer
                     this.textBoxChatScreen.Invoke(new MethodInvoker(delegate ()
                     {
                         textBoxChatScreen.AppendText("Person B: " + receive + "\n");
+
+                        if (this.WindowState == FormWindowState.Minimized)
+                        {
+                            this.FlashNotification();
+                        }
                     }));
                     receive = "";
                 }
@@ -89,6 +111,12 @@ namespace ChatClientServer
             }
 
             backgroundWorker2.CancelAsync();
+        }
+
+        private void notifyIcon1_MouseClick(object sender, MouseEventArgs e)
+        {
+            Show();
+            this.WindowState = FormWindowState.Normal;
         }
 
         private void btnSrvStart_Click(object sender, EventArgs e)
@@ -163,12 +191,12 @@ namespace ChatClientServer
                 {
                     // TO FIX:
                     // client.Connected still returns false after client reconnects to the server
-                    MessageBox.Show("Lost connection to server", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show("Lost connection to client", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
             catch
             {
-                MessageBox.Show("Failed to send message\n\nNot connected to server/client or lost connection", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Failed to send message. Reason:\n\nClient hasn't connected yet\ror the server is not started", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 richTextBoxChatInput.Text = "";
             }
         }
