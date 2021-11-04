@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel;
+using System.Drawing;
 using System.IO;
 using System.Net;
 using System.Net.Sockets;
@@ -87,9 +88,9 @@ namespace ChatClientServer
                     receive = "";
                 }
 
-                catch (Exception ex)
+                catch
                 {
-                    MessageBox.Show(ex.Message.ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show("Lost connection to remote endpoint", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
         }
@@ -119,6 +120,23 @@ namespace ChatClientServer
             this.WindowState = FormWindowState.Normal;
         }
 
+        private void exitToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (lblStatus.Text != "OR")
+            {
+                DialogResult result = MessageBox.Show("Are you sure you want to exit?", "Really exit?", MessageBoxButtons.OKCancel, MessageBoxIcon.Question);
+
+                if (result == DialogResult.OK)
+                {
+                    Application.Exit();
+                }
+            }
+            else
+            {
+                Application.Exit();
+            }
+        }
+
         private void btnSrvStart_Click(object sender, EventArgs e)
         {
             new Thread(() =>
@@ -139,6 +157,11 @@ namespace ChatClientServer
             btnSrvStart.Enabled = false;
             textBoxClientIP.Enabled = false;
             textBoxClientPort.Enabled = false;
+
+            lblStatus.Font = new Font(lblStatus.Font.Name, 20);
+            lblStatus.ForeColor = Color.Green;
+            lblStatus.Text = "Server running on port:\n" + srvPort;
+
             MessageBox.Show("Server started on port: " + srvPort + "\nYou can use your IP from a common subnet in your network to connect", "Success",
                 MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
@@ -165,6 +188,10 @@ namespace ChatClientServer
                 STW.AutoFlush = true;
                 backgroundWorker1.RunWorkerAsync();
                 backgroundWorker2.WorkerSupportsCancellation = true;
+
+                lblStatus.Font = new Font(lblStatus.Font.Name, 20);
+                lblStatus.ForeColor = Color.Green;
+                lblStatus.Text = "Connected to\n" + textBoxClientIP.Text + ":" + textBoxClientPort.Text;
             }
 
             catch
@@ -191,12 +218,12 @@ namespace ChatClientServer
                 {
                     // TO FIX:
                     // client.Connected still returns false after client reconnects to the server
-                    MessageBox.Show("Lost connection to client", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show("Lost connection to remote endpoint", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
             catch
             {
-                MessageBox.Show("Failed to send message. Reason:\n\nClient hasn't connected yet\ror the server is not started", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Failed to send message. Reason:\n\nNo connection to remote endpoint.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 richTextBoxChatInput.Text = "";
             }
         }

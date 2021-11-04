@@ -38,7 +38,7 @@
             this.textBoxClientIP = new System.Windows.Forms.TextBox();
             this.btnConnect = new System.Windows.Forms.Button();
             this.lblIP = new System.Windows.Forms.Label();
-            this.lblOr = new System.Windows.Forms.Label();
+            this.lblStatus = new System.Windows.Forms.Label();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.btnSrvStart = new System.Windows.Forms.Button();
             this.lblSrvPort = new System.Windows.Forms.Label();
@@ -51,11 +51,15 @@
             this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
             this.backgroundWorker2 = new System.ComponentModel.BackgroundWorker();
             this.notifyIcon1 = new System.Windows.Forms.NotifyIcon(this.components);
+            this.menuStrip1 = new System.Windows.Forms.MenuStrip();
+            this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.tabPage2.SuspendLayout();
+            this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
             // tabControl1
@@ -65,22 +69,22 @@
             this.tabControl1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tabControl1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.tabControl1.ItemSize = new System.Drawing.Size(115, 30);
-            this.tabControl1.Location = new System.Drawing.Point(0, 0);
+            this.tabControl1.Location = new System.Drawing.Point(0, 24);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(325, 450);
+            this.tabControl1.Size = new System.Drawing.Size(325, 426);
             this.tabControl1.TabIndex = 1;
             this.tabControl1.TabStop = false;
             // 
             // tabPage1
             // 
             this.tabPage1.Controls.Add(this.groupBox1);
-            this.tabPage1.Controls.Add(this.lblOr);
+            this.tabPage1.Controls.Add(this.lblStatus);
             this.tabPage1.Controls.Add(this.groupBox2);
             this.tabPage1.Location = new System.Drawing.Point(4, 34);
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage1.Size = new System.Drawing.Size(317, 412);
+            this.tabPage1.Size = new System.Drawing.Size(317, 388);
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "Client/Server Controls";
             this.tabPage1.UseVisualStyleBackColor = true;
@@ -95,7 +99,7 @@
             this.groupBox1.Controls.Add(this.btnConnect);
             this.groupBox1.Controls.Add(this.lblIP);
             this.groupBox1.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.groupBox1.Location = new System.Drawing.Point(12, 12);
+            this.groupBox1.Location = new System.Drawing.Point(12, 15);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Size = new System.Drawing.Size(292, 116);
             this.groupBox1.TabIndex = 4;
@@ -152,16 +156,16 @@
             this.lblIP.TabIndex = 0;
             this.lblIP.Text = "IP";
             // 
-            // lblOr
+            // lblStatus
             // 
-            this.lblOr.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.lblOr.AutoSize = true;
-            this.lblOr.Font = new System.Drawing.Font("Microsoft Sans Serif", 27.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblOr.Location = new System.Drawing.Point(119, 183);
-            this.lblOr.Name = "lblOr";
-            this.lblOr.Size = new System.Drawing.Size(74, 42);
-            this.lblOr.TabIndex = 1;
-            this.lblOr.Text = "OR";
+            this.lblStatus.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.lblStatus.Font = new System.Drawing.Font("Microsoft Sans Serif", 27.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblStatus.Location = new System.Drawing.Point(11, 144);
+            this.lblStatus.Name = "lblStatus";
+            this.lblStatus.Size = new System.Drawing.Size(293, 113);
+            this.lblStatus.TabIndex = 1;
+            this.lblStatus.Text = "OR";
+            this.lblStatus.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // groupBox2
             // 
@@ -172,7 +176,7 @@
             this.groupBox2.Controls.Add(this.comboBoxSrvIPSel);
             this.groupBox2.Controls.Add(this.lblSrvIP);
             this.groupBox2.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.groupBox2.Location = new System.Drawing.Point(12, 279);
+            this.groupBox2.Location = new System.Drawing.Point(12, 264);
             this.groupBox2.Name = "groupBox2";
             this.groupBox2.Size = new System.Drawing.Size(292, 116);
             this.groupBox2.TabIndex = 0;
@@ -230,7 +234,7 @@
             this.tabPage2.Location = new System.Drawing.Point(4, 34);
             this.tabPage2.Name = "tabPage2";
             this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage2.Size = new System.Drawing.Size(317, 412);
+            this.tabPage2.Size = new System.Drawing.Size(317, 388);
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "Chat";
             this.tabPage2.UseVisualStyleBackColor = true;
@@ -239,7 +243,7 @@
             // 
             this.richTextBoxChatInput.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.richTextBoxChatInput.Location = new System.Drawing.Point(9, 362);
+            this.richTextBoxChatInput.Location = new System.Drawing.Point(9, 338);
             this.richTextBoxChatInput.Multiline = false;
             this.richTextBoxChatInput.Name = "richTextBoxChatInput";
             this.richTextBoxChatInput.Size = new System.Drawing.Size(245, 45);
@@ -256,7 +260,7 @@
             this.textBoxChatScreen.Location = new System.Drawing.Point(9, 7);
             this.textBoxChatScreen.Name = "textBoxChatScreen";
             this.textBoxChatScreen.ReadOnly = true;
-            this.textBoxChatScreen.Size = new System.Drawing.Size(300, 349);
+            this.textBoxChatScreen.Size = new System.Drawing.Size(300, 325);
             this.textBoxChatScreen.TabIndex = 3;
             this.textBoxChatScreen.Text = "";
             this.textBoxChatScreen.TextChanged += new System.EventHandler(this.textBoxChatScreen_TextChanged);
@@ -265,7 +269,7 @@
             // 
             this.buttonSendMsg.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.buttonSendMsg.Font = new System.Drawing.Font("Microsoft Sans Serif", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.buttonSendMsg.Location = new System.Drawing.Point(260, 362);
+            this.buttonSendMsg.Location = new System.Drawing.Point(260, 338);
             this.buttonSendMsg.Name = "buttonSendMsg";
             this.buttonSendMsg.Size = new System.Drawing.Size(49, 45);
             this.buttonSendMsg.TabIndex = 2;
@@ -292,26 +296,57 @@
             this.notifyIcon1.Visible = true;
             this.notifyIcon1.MouseClick += new System.Windows.Forms.MouseEventHandler(this.notifyIcon1_MouseClick);
             // 
+            // menuStrip1
+            // 
+            this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.fileToolStripMenuItem});
+            this.menuStrip1.Location = new System.Drawing.Point(0, 0);
+            this.menuStrip1.Name = "menuStrip1";
+            this.menuStrip1.Size = new System.Drawing.Size(325, 24);
+            this.menuStrip1.TabIndex = 2;
+            this.menuStrip1.Text = "menuStrip1";
+            // 
+            // fileToolStripMenuItem
+            // 
+            this.fileToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.exitToolStripMenuItem});
+            this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
+            this.fileToolStripMenuItem.Size = new System.Drawing.Size(37, 20);
+            this.fileToolStripMenuItem.Text = "File";
+            // 
+            // exitToolStripMenuItem
+            // 
+            this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
+            this.exitToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.exitToolStripMenuItem.Text = "Exit";
+            this.exitToolStripMenuItem.Click += new System.EventHandler(this.exitToolStripMenuItem_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.AutoScroll = true;
+            this.AutoSize = true;
             this.ClientSize = new System.Drawing.Size(325, 450);
             this.Controls.Add(this.tabControl1);
+            this.Controls.Add(this.menuStrip1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.MainMenuStrip = this.menuStrip1;
             this.MinimumSize = new System.Drawing.Size(341, 489);
             this.Name = "Form1";
             this.Text = "Chat Client/Server";
             this.Load += new System.EventHandler(this.Form1_Load);
             this.tabControl1.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);
-            this.tabPage1.PerformLayout();
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             this.groupBox2.ResumeLayout(false);
             this.groupBox2.PerformLayout();
             this.tabPage2.ResumeLayout(false);
+            this.menuStrip1.ResumeLayout(false);
+            this.menuStrip1.PerformLayout();
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -324,7 +359,7 @@
         private System.Windows.Forms.Label lblSrvPort;
         public System.Windows.Forms.ComboBox comboBoxSrvIPSel;
         public System.Windows.Forms.Label lblSrvIP;
-        private System.Windows.Forms.Label lblOr;
+        private System.Windows.Forms.Label lblStatus;
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.Button btnConnect;
         public System.Windows.Forms.Label lblIP;
@@ -337,6 +372,9 @@
         private System.Windows.Forms.RichTextBox textBoxChatScreen;
         private System.Windows.Forms.RichTextBox richTextBoxChatInput;
         private System.Windows.Forms.NotifyIcon notifyIcon1;
+        private System.Windows.Forms.MenuStrip menuStrip1;
+        private System.Windows.Forms.ToolStripMenuItem fileToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem exitToolStripMenuItem;
     }
 }
 
