@@ -53,7 +53,15 @@
             this.notifyIcon1 = new System.Windows.Forms.NotifyIcon(this.components);
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.historyToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.sourceCodeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.historyFileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.clearHistoryFileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.openHistoryFileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.openHistoryFileLocationToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.clearCurrentHistoryToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.groupBox1.SuspendLayout();
@@ -299,7 +307,8 @@
             // menuStrip1
             // 
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.fileToolStripMenuItem});
+            this.fileToolStripMenuItem,
+            this.helpToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
             this.menuStrip1.Size = new System.Drawing.Size(325, 24);
@@ -309,10 +318,20 @@
             // fileToolStripMenuItem
             // 
             this.fileToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.historyToolStripMenuItem,
             this.exitToolStripMenuItem});
             this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
             this.fileToolStripMenuItem.Size = new System.Drawing.Size(37, 20);
             this.fileToolStripMenuItem.Text = "File";
+            // 
+            // historyToolStripMenuItem
+            // 
+            this.historyToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.clearCurrentHistoryToolStripMenuItem,
+            this.historyFileToolStripMenuItem});
+            this.historyToolStripMenuItem.Name = "historyToolStripMenuItem";
+            this.historyToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.historyToolStripMenuItem.Text = "History";
             // 
             // exitToolStripMenuItem
             // 
@@ -320,6 +339,60 @@
             this.exitToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.exitToolStripMenuItem.Text = "Exit";
             this.exitToolStripMenuItem.Click += new System.EventHandler(this.exitToolStripMenuItem_Click);
+            // 
+            // helpToolStripMenuItem
+            // 
+            this.helpToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.sourceCodeToolStripMenuItem});
+            this.helpToolStripMenuItem.Name = "helpToolStripMenuItem";
+            this.helpToolStripMenuItem.Size = new System.Drawing.Size(44, 20);
+            this.helpToolStripMenuItem.Text = "Help";
+            // 
+            // sourceCodeToolStripMenuItem
+            // 
+            this.sourceCodeToolStripMenuItem.Name = "sourceCodeToolStripMenuItem";
+            this.sourceCodeToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.sourceCodeToolStripMenuItem.Text = "View source code";
+            this.sourceCodeToolStripMenuItem.Click += new System.EventHandler(this.sourceCodeToolStripMenuItem_Click);
+            // 
+            // historyFileToolStripMenuItem
+            // 
+            this.historyFileToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.openHistoryFileToolStripMenuItem,
+            this.openHistoryFileLocationToolStripMenuItem,
+            this.clearHistoryFileToolStripMenuItem});
+            this.historyFileToolStripMenuItem.Name = "historyFileToolStripMenuItem";
+            this.historyFileToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.historyFileToolStripMenuItem.Text = "History file";
+            // 
+            // clearHistoryFileToolStripMenuItem
+            // 
+            this.clearHistoryFileToolStripMenuItem.BackColor = System.Drawing.Color.Red;
+            this.clearHistoryFileToolStripMenuItem.Name = "clearHistoryFileToolStripMenuItem";
+            this.clearHistoryFileToolStripMenuItem.Size = new System.Drawing.Size(207, 22);
+            this.clearHistoryFileToolStripMenuItem.Text = "Clear history file";
+            this.clearHistoryFileToolStripMenuItem.Click += new System.EventHandler(this.clearHistoryFileToolStripMenuItem_Click);
+            // 
+            // openHistoryFileToolStripMenuItem
+            // 
+            this.openHistoryFileToolStripMenuItem.Name = "openHistoryFileToolStripMenuItem";
+            this.openHistoryFileToolStripMenuItem.Size = new System.Drawing.Size(207, 22);
+            this.openHistoryFileToolStripMenuItem.Text = "Open history file";
+            this.openHistoryFileToolStripMenuItem.Click += new System.EventHandler(this.openHistoryFileToolStripMenuItem_Click);
+            // 
+            // openHistoryFileLocationToolStripMenuItem
+            // 
+            this.openHistoryFileLocationToolStripMenuItem.Name = "openHistoryFileLocationToolStripMenuItem";
+            this.openHistoryFileLocationToolStripMenuItem.Size = new System.Drawing.Size(207, 22);
+            this.openHistoryFileLocationToolStripMenuItem.Text = "Open history file location";
+            this.openHistoryFileLocationToolStripMenuItem.Click += new System.EventHandler(this.openHistoryFileLocationToolStripMenuItem_Click);
+            // 
+            // clearCurrentHistoryToolStripMenuItem
+            // 
+            this.clearCurrentHistoryToolStripMenuItem.Name = "clearCurrentHistoryToolStripMenuItem";
+            this.clearCurrentHistoryToolStripMenuItem.Size = new System.Drawing.Size(181, 22);
+            this.clearCurrentHistoryToolStripMenuItem.Text = "Clear current history";
+            this.clearCurrentHistoryToolStripMenuItem.Click += new System.EventHandler(this.clearCurrentHistoryToolStripMenuItem_Click);
             // 
             // Form1
             // 
@@ -357,7 +430,6 @@
         private System.Windows.Forms.GroupBox groupBox2;
         private System.Windows.Forms.Button btnSrvStart;
         private System.Windows.Forms.Label lblSrvPort;
-        public System.Windows.Forms.ComboBox comboBoxSrvIPSel;
         public System.Windows.Forms.Label lblSrvIP;
         private System.Windows.Forms.Label lblStatus;
         private System.Windows.Forms.GroupBox groupBox1;
@@ -375,6 +447,15 @@
         private System.Windows.Forms.MenuStrip menuStrip1;
         private System.Windows.Forms.ToolStripMenuItem fileToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem exitToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem historyToolStripMenuItem;
+        private System.Windows.Forms.ComboBox comboBoxSrvIPSel;
+        private System.Windows.Forms.ToolStripMenuItem helpToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem sourceCodeToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem historyFileToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem openHistoryFileToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem openHistoryFileLocationToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem clearHistoryFileToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem clearCurrentHistoryToolStripMenuItem;
     }
 }
 

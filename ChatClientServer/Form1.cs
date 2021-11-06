@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Net;
@@ -11,15 +12,14 @@ namespace ChatClientServer
 {
     public partial class Form1 : Form
     {
-        private string srvPort;
-        private string receive;
-        private string textToSend;
+        private readonly string chatHistory = Directory.GetCurrentDirectory() + "\\history.log";
+
+        private string srvPort, receive, textToSend;
+
         private StreamReader STR;
         private StreamWriter STW;
         private TcpClient client;
-
-        private void ExitApplication(object sender, EventArgs e) { Application.Exit(); }
-
+        
         protected override void OnFormClosing(FormClosingEventArgs e)
         {
             if (e.CloseReason == CloseReason.WindowsShutDown || e.CloseReason == CloseReason.ApplicationExitCall) return;
@@ -31,7 +31,7 @@ namespace ChatClientServer
             }
         }
 
-        public void GetLocalIPs()
+        private void GetLocalIPs()
         {
             var host = Dns.GetHostEntry(Dns.GetHostName());
 
@@ -44,7 +44,9 @@ namespace ChatClientServer
             }
         }
 
-        public static int GetRandomUnusedPort()
+        private void ExitApplication(object sender, EventArgs e) { Application.Exit(); }
+
+        private static int GetRandomUnusedPort()
         {
             var portListener = new TcpListener(IPAddress.Any, 0);
             portListener.Start();
@@ -67,6 +69,34 @@ namespace ChatClientServer
             lblSrvPort.Text += srvPort;
             notifyIcon1.ContextMenu = contextMenu;
             contextMenu.MenuItems.Add("Exit", ExitApplication);
+
+            if (!File.Exists(chatHistory))
+            {
+                using (FileStream fs = File.Create(chatHistory)) { };
+                // TODO: Encryption method might need to be changed:
+                // it doesn't seem to work in all cases
+                File.Encrypt(chatHistory);
+
+                MessageBox.Show("An encrypted history file has been created. The full path to the file is:\n\n" +
+                    chatHistory, "History file successfully created", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            else
+            {
+                if (new FileInfo(chatHistory).Length != 0)
+                {
+                    try
+                    {
+                        textBoxChatScreen.Text = File.ReadAllText(chatHistory);
+                        textBoxChatScreen.SelectionStart = textBoxChatScreen.Text.Length;
+                        textBoxChatScreen.ScrollToCaret();
+                    }
+                    catch
+                    {
+                        MessageBox.Show("Tried to decrypt and load the history file, but failed.\n\nEnsure your user is authorized to decrypt it.",
+                            "Error while loading history file", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                }
+            }
         }
 
         private void backgroundWorker1_DoWork(object sender, DoWorkEventArgs e)
@@ -76,21 +106,30 @@ namespace ChatClientServer
                 try
                 {
                     receive = STR.ReadLine();
-                    this.textBoxChatScreen.Invoke(new MethodInvoker(delegate ()
-                    {
-                        textBoxChatScreen.AppendText("Person B: " + receive + "\n");
+                    string receiveFormatted = $"[{DateTime.Now:dd/MM/yyyy HH:mm}]\nPerson B: " + receive + "\n\n";
 
-                        if (this.WindowState == FormWindowState.Minimized)
+                    textBoxChatScreen.Invoke(new MethodInvoker(delegate ()
+                    {
+                        textBoxChatScreen.AppendText(receiveFormatted);
+
+                        using (StreamWriter sw = File.AppendText(chatHistory))
+                        {
+                            sw.Write(receiveFormatted);
+                        }
+
+                        if (WindowState == FormWindowState.Minimized)
                         {
                             this.FlashNotification();
                         }
                     }));
+
                     receive = "";
                 }
 
                 catch
                 {
-                    MessageBox.Show("Lost connection to remote endpoint", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show("Lost connection to remote endpoint.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    Application.Restart();
                 }
             }
         }
@@ -100,11 +139,18 @@ namespace ChatClientServer
             if (client.Connected)
             {
                 STW.WriteLine(textToSend);
-                this.textBoxChatScreen.Invoke(new MethodInvoker(delegate ()
+                string textToSendFormatted = $"[{DateTime.Now:dd/MM/yyyy HH:mm}]\nPerson A: " + textToSend + "\n\n";
+
+                textBoxChatScreen.Invoke(new MethodInvoker(delegate ()
                 {
-                    textBoxChatScreen.AppendText("Person A: " + textToSend + "\n");
+                    textBoxChatScreen.AppendText(textToSendFormatted);
                 }
                 ));
+
+                using (StreamWriter sw = File.AppendText(chatHistory))
+                {
+                    sw.Write(textToSendFormatted);
+                }
             }
             else
             {
@@ -117,7 +163,49 @@ namespace ChatClientServer
         private void notifyIcon1_MouseClick(object sender, MouseEventArgs e)
         {
             Show();
-            this.WindowState = FormWindowState.Normal;
+            WindowState = FormWindowState.Normal;
+        }
+
+        private void clearCurrentHistoryToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            textBoxChatScreen.Text = "";
+            MessageBox.Show("Current history cleared.", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+        }
+
+        private void openHistoryFileToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (File.Exists(chatHistory))
+            {
+                Process.Start(chatHistory);
+            }
+            else
+            {
+                MessageBox.Show("The chat history file does not exist!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void openHistoryFileLocationToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Process.Start("explorer.exe", $"/select, {chatHistory}");
+        }
+
+        private void clearHistoryFileToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            DialogResult result = MessageBox.Show("You are about to clear the chat history file!\n\nAre you sure you want to proceed?", "Warning!",
+                MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+
+            if (result == DialogResult.Yes)
+            {
+                if (new FileInfo(chatHistory).Length == 0)
+                {
+                    MessageBox.Show("Nothing to clear! File is empty.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+                else
+                {
+                    File.WriteAllText(chatHistory, string.Empty);
+                    MessageBox.Show("Chat history file cleared.", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+            }
         }
 
         private void exitToolStripMenuItem_Click(object sender, EventArgs e)
@@ -135,6 +223,11 @@ namespace ChatClientServer
             {
                 Application.Exit();
             }
+        }
+
+        private void sourceCodeToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Process.Start("https://github.com/ProudlyTM/ChatClientServer");
         }
 
         private void btnSrvStart_Click(object sender, EventArgs e)
@@ -204,21 +297,11 @@ namespace ChatClientServer
         {
             try
             {
-                if (client.Connected)
+                if (client.Connected && richTextBoxChatInput.Text != "")
                 {
-                    if (richTextBoxChatInput.Text != "")
-                    {
-                        textToSend = richTextBoxChatInput.Text;
-                        backgroundWorker2.RunWorkerAsync();
-                    }
-
+                    textToSend = richTextBoxChatInput.Text;
+                    backgroundWorker2.RunWorkerAsync();
                     richTextBoxChatInput.Text = "";
-                }
-                else
-                {
-                    // TO FIX:
-                    // client.Connected still returns false after client reconnects to the server
-                    MessageBox.Show("Lost connection to remote endpoint", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
             catch
@@ -247,9 +330,8 @@ namespace ChatClientServer
 
         private void textBoxChatScreen_TextChanged(object sender, EventArgs e)
         {
-            // Set the current caret position to the end
+            // Scroll the text to the bottom on new message sent/received
             textBoxChatScreen.SelectionStart = textBoxChatScreen.Text.Length;
-            // Scroll the chat automatically
             textBoxChatScreen.ScrollToCaret();
         }
 
