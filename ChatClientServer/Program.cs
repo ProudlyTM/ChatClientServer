@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
-using System.Net;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace ChatClientServer
@@ -15,6 +13,16 @@ namespace ChatClientServer
         [STAThread]
         static void Main()
         {
+            /*
+            string thisProcessName = Process.GetCurrentProcess().ProcessName;
+
+            if (Process.GetProcesses().Count(p => p.ProcessName == thisProcessName) > 1)
+            {
+                MessageBox.Show("Chat Client/Server is already running!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                return;
+            }
+            */
+
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(new Form1());

@@ -3,6 +3,7 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
 using System.IO;
+using System.Linq;
 using System.Net;
 using System.Net.Sockets;
 using System.Threading;
@@ -12,9 +13,13 @@ namespace ChatClientServer
 {
     public partial class Form1 : Form
     {
-        private readonly string chatHistory = Directory.GetCurrentDirectory() + "\\history.log";
+        private string srvPort, receive, textToSend, encryptedText, decryptedText;
 
-        private string srvPort, receive, textToSend;
+        private static readonly string chatHistory = Directory.GetCurrentDirectory() + "\\history.log";
+
+        private static string[] chatHistoryLines;
+
+        private readonly FormPassword child = new FormPassword();
 
         private StreamReader STR;
         private StreamWriter STW;
@@ -22,7 +27,25 @@ namespace ChatClientServer
         
         protected override void OnFormClosing(FormClosingEventArgs e)
         {
-            if (e.CloseReason == CloseReason.WindowsShutDown || e.CloseReason == CloseReason.ApplicationExitCall) return;
+            if (e.CloseReason == CloseReason.WindowsShutDown || e.CloseReason == CloseReason.ApplicationExitCall)
+            {
+                Properties.Settings.Default.F1State = WindowState;
+
+                if (WindowState == FormWindowState.Normal)
+                {
+                    Properties.Settings.Default.F1Location = Location;
+                    Properties.Settings.Default.F1Size = Size;
+                }
+                else
+                {
+                    Properties.Settings.Default.F1Location = RestoreBounds.Location;
+                    Properties.Settings.Default.F1Size = RestoreBounds.Size;
+                }
+
+                Properties.Settings.Default.Save();
+
+                return;
+            }
             else
             {
                 e.Cancel = true;
@@ -44,7 +67,11 @@ namespace ChatClientServer
             }
         }
 
-        private void ExitApplication(object sender, EventArgs e) { Application.Exit(); }
+        private void ExitApplication(object sender, EventArgs e)
+        {
+            notifyIcon1.Visible = false;
+            Application.Exit();
+        }
 
         private static int GetRandomUnusedPort()
         {
@@ -62,6 +89,10 @@ namespace ChatClientServer
 
         private void Form1_Load(object sender, EventArgs e)
         {
+            WindowState = Properties.Settings.Default.F1State;
+            Location = Properties.Settings.Default.F1Location;
+            Size = Properties.Settings.Default.F1Size;
+
             GetLocalIPs();
             ContextMenu contextMenu = new ContextMenu();
             comboBoxSrvIPSel.SelectedIndex = 0;
@@ -73,27 +104,107 @@ namespace ChatClientServer
             if (!File.Exists(chatHistory))
             {
                 using (FileStream fs = File.Create(chatHistory)) { };
-                // TODO: Encryption method might need to be changed:
-                // it doesn't seem to work in all cases
-                File.Encrypt(chatHistory);
 
-                MessageBox.Show("An encrypted history file has been created. The full path to the file is:\n\n" +
-                    chatHistory, "History file successfully created", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                DialogResult result = MessageBox.Show("Would you like to encrypt the chat history file with a password?", "Welcome",
+                    MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+
+                if (result == DialogResult.Yes)
+                {
+                    FormPassword child = new FormPassword();
+                    child.ShowDialog();
+
+                    if (child.IsBtnOKPressed && child.textBoxPassword.Text != "")
+                    {
+                        using (StreamWriter sw = File.AppendText(chatHistory))
+                        {
+                            sw.Write(StringCipher.Encrypt("control_line_DO_NOT_DELETE\n\n", child.textBoxPassword.Text));
+                        }
+
+                        MessageBox.Show("The history file will now be encrypted and decrypted using that password.", "Success",
+                            MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    }
+                    else
+                    {
+                        using (StreamWriter sw = File.AppendText(chatHistory))
+                        {
+                            sw.Write("control_line_DO_NOT_DELETE\n\n");
+                        }
+
+                        MessageBox.Show("No password was entered!\n\nYour chat history file will be unencrypted! " +
+                            "If this was a mistake, delete the file, restart the app and try again.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    }
+                }
+                else
+                {
+                    using (StreamWriter sw = File.AppendText(chatHistory))
+                    {
+                        sw.Write("control_line_DO_NOT_DELETE\n\n");
+                    }
+
+                    MessageBox.Show("The chat history file will not be encrypted!\n\n" +
+                        "If this was a mistake, delete the file, restart the app and try again.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                }
             }
             else
             {
                 if (new FileInfo(chatHistory).Length != 0)
                 {
-                    try
+                    int maxTries = 3;
+                    chatHistoryLines = File.ReadAllLines(chatHistory);
+
+                    if (File.ReadLines(chatHistory).First() != "control_line_DO_NOT_DELETE")
                     {
-                        textBoxChatScreen.Text = File.ReadAllText(chatHistory);
+                        child.lblPassword.Text = "Enter your password";
+
+                        while (maxTries <= 3)
+                        {
+                            child.ShowDialog();
+
+                            try
+                            {
+                                if (StringCipher.Decrypt(File.ReadLines(chatHistory).First(), child.textBoxPassword.Text.ToString()) != "control_line_DO_NOT_DELETE")
+                                {
+                                    foreach (var line in chatHistoryLines)
+                                    {
+                                        decryptedText = StringCipher.Decrypt(line.ToString(), child.textBoxPassword.Text);
+
+                                        textBoxChatScreen.Text += decryptedText;
+                                    }
+
+                                    string[] linesFinal = textBoxChatScreen.Text.Split(Environment.NewLine.ToCharArray()).Skip(2).ToArray();
+
+                                    textBoxChatScreen.Lines = linesFinal.ToArray();
+                                    textBoxChatScreen.SelectionStart = textBoxChatScreen.Text.Length;
+                                    textBoxChatScreen.ScrollToCaret();
+
+                                    MessageBox.Show("Welcome!\n\nThe chat history file has been successfully decrypted!", "Welcome",
+                                        MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                                    break;
+                                }
+                            }
+                            catch
+                            {
+                                maxTries--;
+
+                                if (maxTries == 0)
+                                {
+                                    MessageBox.Show("Tried to decrypt and load the chat history file, but failed!\n\nEnsure you are entering the correct password.",
+                                        "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+
+                                    notifyIcon1.Visible = false;
+                                    Application.Exit();
+                                }
+                            }
+                        }
+                    }
+                    else
+                    {
+                        var linesFinal = File.ReadAllLines(chatHistory).Skip(2);
+
+                        textBoxChatScreen.Lines = linesFinal.ToArray();
                         textBoxChatScreen.SelectionStart = textBoxChatScreen.Text.Length;
                         textBoxChatScreen.ScrollToCaret();
-                    }
-                    catch
-                    {
-                        MessageBox.Show("Tried to decrypt and load the history file, but failed.\n\nEnsure your user is authorized to decrypt it.",
-                            "Error while loading history file", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
                 }
             }
@@ -106,17 +217,31 @@ namespace ChatClientServer
                 try
                 {
                     receive = STR.ReadLine();
-                    string receiveFormatted = $"[{DateTime.Now:dd/MM/yyyy HH:mm}]\nPerson B: " + receive + "\n\n";
+                    string receiveFormatted = $"[{DateTime.Now:dd/MM/yyyy HH:mm}]\nPerson B: {receive}\n\n";
 
                     textBoxChatScreen.Invoke(new MethodInvoker(delegate ()
                     {
                         textBoxChatScreen.AppendText(receiveFormatted);
 
-                        using (StreamWriter sw = File.AppendText(chatHistory))
+                        if (File.ReadLines(chatHistory).First() != "control_line_DO_NOT_DELETE")
                         {
-                            sw.Write(receiveFormatted);
-                        }
+                            string encryptedBuffer = File.ReadAllText(chatHistory);
+                            string decryptedBuffer = StringCipher.Decrypt(encryptedBuffer, child.textBoxPassword.Text) + receiveFormatted;
+                            encryptedText = StringCipher.Encrypt(decryptedBuffer, child.textBoxPassword.Text);
 
+                            using (StreamWriter sw = File.CreateText(chatHistory))
+                            {
+                                sw.Write(encryptedText);
+                            }
+                        }
+                        else
+                        {
+                            using (StreamWriter sw = File.AppendText(chatHistory))
+                            {
+                                sw.Write(receiveFormatted);
+                            }
+                        }
+                        
                         if (WindowState == FormWindowState.Minimized)
                         {
                             this.FlashNotification();
@@ -139,7 +264,7 @@ namespace ChatClientServer
             if (client.Connected)
             {
                 STW.WriteLine(textToSend);
-                string textToSendFormatted = $"[{DateTime.Now:dd/MM/yyyy HH:mm}]\nPerson A: " + textToSend + "\n\n";
+                string textToSendFormatted = $"[{DateTime.Now:dd/MM/yyyy HH:mm}]\nPerson A: {textToSend}\n\n";
 
                 textBoxChatScreen.Invoke(new MethodInvoker(delegate ()
                 {
@@ -147,9 +272,23 @@ namespace ChatClientServer
                 }
                 ));
 
-                using (StreamWriter sw = File.AppendText(chatHistory))
+                if (File.ReadLines(chatHistory).First() != "control_line_DO_NOT_DELETE")
                 {
-                    sw.Write(textToSendFormatted);
+                    string encryptedBuffer = File.ReadAllText(chatHistory);
+                    string decryptedBuffer = StringCipher.Decrypt(encryptedBuffer, child.textBoxPassword.Text) + textToSendFormatted;
+                    encryptedText = StringCipher.Encrypt(decryptedBuffer, child.textBoxPassword.Text);
+
+                    using (StreamWriter sw = File.CreateText(chatHistory))
+                    {
+                        sw.Write(encryptedText);
+                    }
+                }
+                else
+                {
+                    using (StreamWriter sw = File.AppendText(chatHistory))
+                    {
+                        sw.Write(textToSendFormatted);
+                    }
                 }
             }
             else
@@ -191,7 +330,7 @@ namespace ChatClientServer
 
         private void clearHistoryFileToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            DialogResult result = MessageBox.Show("You are about to clear the chat history file!\n\nAre you sure you want to proceed?", "Warning!",
+            DialogResult result = MessageBox.Show("You are about to clear the chat history file!\n\nAre you sure you want to proceed?", "Warning",
                 MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
 
             if (result == DialogResult.Yes)
@@ -202,7 +341,12 @@ namespace ChatClientServer
                 }
                 else
                 {
-                    File.WriteAllText(chatHistory, string.Empty);
+                    // TODO: Check if the chat history file was encrypted and if yes, re-add and re-encrypt the control lines using the same password
+                    using (StreamWriter sw = File.CreateText(chatHistory))
+                    {
+                        sw.Write("control_line_DO_NOT_DELETE\n\n");
+                    }
+
                     MessageBox.Show("Chat history file cleared.", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
             }
@@ -216,11 +360,13 @@ namespace ChatClientServer
 
                 if (result == DialogResult.OK)
                 {
+                    notifyIcon1.Visible = false;
                     Application.Exit();
                 }
             }
             else
             {
+                notifyIcon1.Visible = false;
                 Application.Exit();
             }
         }
