@@ -350,10 +350,19 @@ namespace ChatClientServer
                 }
                 else
                 {
-                    // TODO: Check if the chat history file was encrypted and if yes, re-add and re-encrypt the control lines using the same password
-                    using (StreamWriter sw = File.CreateText(chatHistory))
+                    try
                     {
-                        sw.Write("control_line_DO_NOT_DELETE\n\n");
+                        using (StreamWriter sw = File.CreateText(chatHistory))
+                        {
+                            sw.Write(StringCipher.Encrypt("control_line_DO_NOT_DELETE\n\n", child.textBoxPassword.Text));
+                        }
+                    }
+                    catch
+                    {
+                        using (StreamWriter sw = File.CreateText(chatHistory))
+                        {
+                            sw.Write("control_line_DO_NOT_DELETE\n\n");
+                        }
                     }
 
                     MessageBox.Show("Chat history file cleared.", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
