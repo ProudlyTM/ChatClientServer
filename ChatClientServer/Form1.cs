@@ -370,6 +370,18 @@ namespace ChatClientServer
             }
         }
 
+        private void deleteHistoryFileAndRestartAppToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            DialogResult result = MessageBox.Show("You are about to delete the chat history file and restart the app!\n\nAre you sure you want to proceed?", "Warning",
+                MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+            
+            if (result == DialogResult.Yes)
+            {
+                File.Delete(chatHistory);
+                Application.Restart();
+            }
+        }
+
         private void exitToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (lblStatus.Text != "OR")

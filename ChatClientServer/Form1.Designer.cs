@@ -54,14 +54,15 @@
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.historyToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.clearCurrentHistoryToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.historyFileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.openHistoryFileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.openHistoryFileLocationToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.clearHistoryFileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.sourceCodeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.historyFileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.clearHistoryFileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.openHistoryFileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.openHistoryFileLocationToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.clearCurrentHistoryToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.deleteHistoryFileAndRestartAppToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.groupBox1.SuspendLayout();
@@ -333,6 +334,46 @@
             this.historyToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.historyToolStripMenuItem.Text = "History";
             // 
+            // clearCurrentHistoryToolStripMenuItem
+            // 
+            this.clearCurrentHistoryToolStripMenuItem.Name = "clearCurrentHistoryToolStripMenuItem";
+            this.clearCurrentHistoryToolStripMenuItem.Size = new System.Drawing.Size(181, 22);
+            this.clearCurrentHistoryToolStripMenuItem.Text = "Clear current history";
+            this.clearCurrentHistoryToolStripMenuItem.Click += new System.EventHandler(this.clearCurrentHistoryToolStripMenuItem_Click);
+            // 
+            // historyFileToolStripMenuItem
+            // 
+            this.historyFileToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.openHistoryFileToolStripMenuItem,
+            this.openHistoryFileLocationToolStripMenuItem,
+            this.clearHistoryFileToolStripMenuItem,
+            this.deleteHistoryFileAndRestartAppToolStripMenuItem});
+            this.historyFileToolStripMenuItem.Name = "historyFileToolStripMenuItem";
+            this.historyFileToolStripMenuItem.Size = new System.Drawing.Size(181, 22);
+            this.historyFileToolStripMenuItem.Text = "History file";
+            // 
+            // openHistoryFileToolStripMenuItem
+            // 
+            this.openHistoryFileToolStripMenuItem.Name = "openHistoryFileToolStripMenuItem";
+            this.openHistoryFileToolStripMenuItem.Size = new System.Drawing.Size(247, 22);
+            this.openHistoryFileToolStripMenuItem.Text = "Open history file";
+            this.openHistoryFileToolStripMenuItem.Click += new System.EventHandler(this.openHistoryFileToolStripMenuItem_Click);
+            // 
+            // openHistoryFileLocationToolStripMenuItem
+            // 
+            this.openHistoryFileLocationToolStripMenuItem.Name = "openHistoryFileLocationToolStripMenuItem";
+            this.openHistoryFileLocationToolStripMenuItem.Size = new System.Drawing.Size(247, 22);
+            this.openHistoryFileLocationToolStripMenuItem.Text = "Open history file location";
+            this.openHistoryFileLocationToolStripMenuItem.Click += new System.EventHandler(this.openHistoryFileLocationToolStripMenuItem_Click);
+            // 
+            // clearHistoryFileToolStripMenuItem
+            // 
+            this.clearHistoryFileToolStripMenuItem.BackColor = System.Drawing.Color.Red;
+            this.clearHistoryFileToolStripMenuItem.Name = "clearHistoryFileToolStripMenuItem";
+            this.clearHistoryFileToolStripMenuItem.Size = new System.Drawing.Size(247, 22);
+            this.clearHistoryFileToolStripMenuItem.Text = "Clear history file";
+            this.clearHistoryFileToolStripMenuItem.Click += new System.EventHandler(this.clearHistoryFileToolStripMenuItem_Click);
+            // 
             // exitToolStripMenuItem
             // 
             this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
@@ -351,48 +392,17 @@
             // sourceCodeToolStripMenuItem
             // 
             this.sourceCodeToolStripMenuItem.Name = "sourceCodeToolStripMenuItem";
-            this.sourceCodeToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.sourceCodeToolStripMenuItem.Size = new System.Drawing.Size(166, 22);
             this.sourceCodeToolStripMenuItem.Text = "View source code";
             this.sourceCodeToolStripMenuItem.Click += new System.EventHandler(this.sourceCodeToolStripMenuItem_Click);
             // 
-            // historyFileToolStripMenuItem
+            // deleteHistoryFileAndRestartAppToolStripMenuItem
             // 
-            this.historyFileToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.openHistoryFileToolStripMenuItem,
-            this.openHistoryFileLocationToolStripMenuItem,
-            this.clearHistoryFileToolStripMenuItem});
-            this.historyFileToolStripMenuItem.Name = "historyFileToolStripMenuItem";
-            this.historyFileToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.historyFileToolStripMenuItem.Text = "History file";
-            // 
-            // clearHistoryFileToolStripMenuItem
-            // 
-            this.clearHistoryFileToolStripMenuItem.BackColor = System.Drawing.Color.Red;
-            this.clearHistoryFileToolStripMenuItem.Name = "clearHistoryFileToolStripMenuItem";
-            this.clearHistoryFileToolStripMenuItem.Size = new System.Drawing.Size(207, 22);
-            this.clearHistoryFileToolStripMenuItem.Text = "Clear history file";
-            this.clearHistoryFileToolStripMenuItem.Click += new System.EventHandler(this.clearHistoryFileToolStripMenuItem_Click);
-            // 
-            // openHistoryFileToolStripMenuItem
-            // 
-            this.openHistoryFileToolStripMenuItem.Name = "openHistoryFileToolStripMenuItem";
-            this.openHistoryFileToolStripMenuItem.Size = new System.Drawing.Size(207, 22);
-            this.openHistoryFileToolStripMenuItem.Text = "Open history file";
-            this.openHistoryFileToolStripMenuItem.Click += new System.EventHandler(this.openHistoryFileToolStripMenuItem_Click);
-            // 
-            // openHistoryFileLocationToolStripMenuItem
-            // 
-            this.openHistoryFileLocationToolStripMenuItem.Name = "openHistoryFileLocationToolStripMenuItem";
-            this.openHistoryFileLocationToolStripMenuItem.Size = new System.Drawing.Size(207, 22);
-            this.openHistoryFileLocationToolStripMenuItem.Text = "Open history file location";
-            this.openHistoryFileLocationToolStripMenuItem.Click += new System.EventHandler(this.openHistoryFileLocationToolStripMenuItem_Click);
-            // 
-            // clearCurrentHistoryToolStripMenuItem
-            // 
-            this.clearCurrentHistoryToolStripMenuItem.Name = "clearCurrentHistoryToolStripMenuItem";
-            this.clearCurrentHistoryToolStripMenuItem.Size = new System.Drawing.Size(181, 22);
-            this.clearCurrentHistoryToolStripMenuItem.Text = "Clear current history";
-            this.clearCurrentHistoryToolStripMenuItem.Click += new System.EventHandler(this.clearCurrentHistoryToolStripMenuItem_Click);
+            this.deleteHistoryFileAndRestartAppToolStripMenuItem.BackColor = System.Drawing.Color.Red;
+            this.deleteHistoryFileAndRestartAppToolStripMenuItem.Name = "deleteHistoryFileAndRestartAppToolStripMenuItem";
+            this.deleteHistoryFileAndRestartAppToolStripMenuItem.Size = new System.Drawing.Size(247, 22);
+            this.deleteHistoryFileAndRestartAppToolStripMenuItem.Text = "Delete history file and restart app";
+            this.deleteHistoryFileAndRestartAppToolStripMenuItem.Click += new System.EventHandler(this.deleteHistoryFileAndRestartAppToolStripMenuItem_Click);
             // 
             // Form1
             // 
@@ -456,6 +466,7 @@
         private System.Windows.Forms.ToolStripMenuItem openHistoryFileLocationToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem clearHistoryFileToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem clearCurrentHistoryToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem deleteHistoryFileAndRestartAppToolStripMenuItem;
     }
 }
 
