@@ -13,7 +13,7 @@ namespace ChatClientServer
 {
     public partial class Form1 : Form
     {
-        private string srvPort, receive, textToSend, encryptedText, decryptedText;
+        private string srvPort, receive, textToSend, encryptedText, decryptedText, decryptedBuffer;
 
         private static readonly string chatHistory = Directory.GetCurrentDirectory() + "\\history.log";
 
@@ -226,7 +226,16 @@ namespace ChatClientServer
                         if (File.ReadLines(chatHistory).First() != "control_line_DO_NOT_DELETE")
                         {
                             string encryptedBuffer = File.ReadAllText(chatHistory);
-                            string decryptedBuffer = StringCipher.Decrypt(encryptedBuffer, child.textBoxPassword.Text) + receiveFormatted;
+
+                            try
+                            {
+                                decryptedBuffer = StringCipher.Decrypt(encryptedBuffer, child.textBoxPassword.Text) + receiveFormatted;
+                            }
+                            catch
+                            {
+                                decryptedBuffer = encryptedBuffer;
+                            }
+                            
                             encryptedText = StringCipher.Encrypt(decryptedBuffer, child.textBoxPassword.Text);
 
                             using (StreamWriter sw = File.CreateText(chatHistory))
