@@ -39,12 +39,12 @@
             // lblPassword
             // 
             this.lblPassword.AutoSize = true;
-            this.lblPassword.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblPassword.Location = new System.Drawing.Point(51, 10);
+            this.lblPassword.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblPassword.Location = new System.Drawing.Point(17, 12);
             this.lblPassword.Name = "lblPassword";
-            this.lblPassword.Size = new System.Drawing.Size(128, 15);
+            this.lblPassword.Size = new System.Drawing.Size(202, 13);
             this.lblPassword.TabIndex = 0;
-            this.lblPassword.Text = "Enter a new password";
+            this.lblPassword.Text = "Enter a new password (min. 8 characters)";
             // 
             // textBoxPassword
             // 
@@ -97,6 +97,8 @@
             this.Controls.Add(this.textBoxPassword);
             this.Controls.Add(this.lblPassword);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.MaximumSize = new System.Drawing.Size(254, 138);
+            this.MinimumSize = new System.Drawing.Size(254, 138);
             this.Name = "FormPassword";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Password";

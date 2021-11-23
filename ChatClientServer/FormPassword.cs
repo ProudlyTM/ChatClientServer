@@ -35,14 +35,30 @@ namespace ChatClientServer
 
         private void btnOKPassword_Click(object sender, EventArgs e)
         {
-            if (textBoxPassword.Text != "")
+            if (lblPassword.Text != "Enter your password")
             {
-                IsBtnOKPressed = true;
-                Close();
+                if (textBoxPassword.Text != "" && textBoxPassword.Text.Length >= 8)
+                {
+                    IsBtnOKPressed = true;
+                    Close();
+                }
+                else
+                {
+                    MessageBox.Show("You need to enter a new password!\n\nThe password should be at least 8 characters long.", "Error",
+                        MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
             }
             else
             {
-                MessageBox.Show("You need to enter a password!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                if (textBoxPassword.Text != "" && textBoxPassword.Text.Length >= 8)
+                {
+                    IsBtnOKPressed = true;
+                    Close();
+                }
+                else
+                {
+                    MessageBox.Show("Your password should be at least 8 characters long!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
             }
         }
 

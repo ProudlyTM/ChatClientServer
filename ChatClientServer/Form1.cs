@@ -24,7 +24,7 @@ namespace ChatClientServer
         private StreamReader STR;
         private StreamWriter STW;
         private TcpClient client;
-        
+
         protected override void OnFormClosing(FormClosingEventArgs e)
         {
             if (e.CloseReason == CloseReason.WindowsShutDown || e.CloseReason == CloseReason.ApplicationExitCall)
@@ -154,6 +154,8 @@ namespace ChatClientServer
 
                     if (File.ReadLines(chatHistory).First() != "control_line_DO_NOT_DELETE")
                     {
+                        child.lblPassword.Font = new Font(child.lblPassword.Font.FontFamily, 9);
+                        child.lblPassword.Left = 55;
                         child.lblPassword.Text = "Enter your password";
 
                         while (maxTries <= 3)
