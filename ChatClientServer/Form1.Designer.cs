@@ -40,6 +40,8 @@
             this.lblIP = new System.Windows.Forms.Label();
             this.lblStatus = new System.Windows.Forms.Label();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.btnGenRandomPort = new System.Windows.Forms.Button();
+            this.textBoxSrvPort = new System.Windows.Forms.TextBox();
             this.btnSrvStart = new System.Windows.Forms.Button();
             this.lblSrvPort = new System.Windows.Forms.Label();
             this.comboBoxSrvIPSel = new System.Windows.Forms.ComboBox();
@@ -59,10 +61,11 @@
             this.openHistoryFileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.openHistoryFileLocationToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.clearHistoryFileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.deleteHistoryFileAndRestartAppToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.sourceCodeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.deleteHistoryFileAndRestartAppToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.groupBox1.SuspendLayout();
@@ -180,6 +183,8 @@
             // 
             this.groupBox2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.groupBox2.Controls.Add(this.btnGenRandomPort);
+            this.groupBox2.Controls.Add(this.textBoxSrvPort);
             this.groupBox2.Controls.Add(this.btnSrvStart);
             this.groupBox2.Controls.Add(this.lblSrvPort);
             this.groupBox2.Controls.Add(this.comboBoxSrvIPSel);
@@ -192,13 +197,38 @@
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Start a Server";
             // 
+            // btnGenRandomPort
+            // 
+            this.btnGenRandomPort.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnGenRandomPort.Location = new System.Drawing.Point(216, 59);
+            this.btnGenRandomPort.Name = "btnGenRandomPort";
+            this.btnGenRandomPort.Size = new System.Drawing.Size(59, 45);
+            this.btnGenRandomPort.TabIndex = 8;
+            this.btnGenRandomPort.Text = "⟳";
+            this.btnGenRandomPort.UseVisualStyleBackColor = true;
+            this.btnGenRandomPort.Click += new System.EventHandler(this.btnGenRandomPort_Click);
+            this.btnGenRandomPort.MouseHover += new System.EventHandler(this.btnGenRandomPort_MouseHover);
+            // 
+            // textBoxSrvPort
+            // 
+            this.textBoxSrvPort.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.textBoxSrvPort.Location = new System.Drawing.Point(216, 26);
+            this.textBoxSrvPort.MaxLength = 5;
+            this.textBoxSrvPort.Name = "textBoxSrvPort";
+            this.textBoxSrvPort.ShortcutsEnabled = false;
+            this.textBoxSrvPort.Size = new System.Drawing.Size(59, 26);
+            this.textBoxSrvPort.TabIndex = 6;
+            this.textBoxSrvPort.TextChanged += new System.EventHandler(this.textBoxSrvPort_TextChanged);
+            this.textBoxSrvPort.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textBoxSrvPort_KeyPress);
+            // 
             // btnSrvStart
             // 
             this.btnSrvStart.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.btnSrvStart.Location = new System.Drawing.Point(16, 59);
             this.btnSrvStart.Name = "btnSrvStart";
-            this.btnSrvStart.Size = new System.Drawing.Size(260, 45);
+            this.btnSrvStart.Size = new System.Drawing.Size(194, 45);
             this.btnSrvStart.TabIndex = 3;
             this.btnSrvStart.Text = "START";
             this.btnSrvStart.UseVisualStyleBackColor = true;
@@ -208,7 +238,7 @@
             // 
             this.lblSrvPort.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.lblSrvPort.AutoSize = true;
-            this.lblSrvPort.Location = new System.Drawing.Point(181, 28);
+            this.lblSrvPort.Location = new System.Drawing.Point(175, 29);
             this.lblSrvPort.Name = "lblSrvPort";
             this.lblSrvPort.Size = new System.Drawing.Size(46, 20);
             this.lblSrvPort.TabIndex = 2;
@@ -289,6 +319,7 @@
             // 
             // backgroundWorker1
             // 
+            this.backgroundWorker1.WorkerReportsProgress = true;
             this.backgroundWorker1.DoWork += new System.ComponentModel.DoWorkEventHandler(this.backgroundWorker1_DoWork);
             // 
             // backgroundWorker2
@@ -331,7 +362,7 @@
             this.clearCurrentHistoryToolStripMenuItem,
             this.historyFileToolStripMenuItem});
             this.historyToolStripMenuItem.Name = "historyToolStripMenuItem";
-            this.historyToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.historyToolStripMenuItem.Size = new System.Drawing.Size(112, 22);
             this.historyToolStripMenuItem.Text = "History";
             // 
             // clearCurrentHistoryToolStripMenuItem
@@ -374,10 +405,18 @@
             this.clearHistoryFileToolStripMenuItem.Text = "Clear history file";
             this.clearHistoryFileToolStripMenuItem.Click += new System.EventHandler(this.clearHistoryFileToolStripMenuItem_Click);
             // 
+            // deleteHistoryFileAndRestartAppToolStripMenuItem
+            // 
+            this.deleteHistoryFileAndRestartAppToolStripMenuItem.BackColor = System.Drawing.Color.Red;
+            this.deleteHistoryFileAndRestartAppToolStripMenuItem.Name = "deleteHistoryFileAndRestartAppToolStripMenuItem";
+            this.deleteHistoryFileAndRestartAppToolStripMenuItem.Size = new System.Drawing.Size(247, 22);
+            this.deleteHistoryFileAndRestartAppToolStripMenuItem.Text = "Delete history file and restart app";
+            this.deleteHistoryFileAndRestartAppToolStripMenuItem.Click += new System.EventHandler(this.deleteHistoryFileAndRestartAppToolStripMenuItem_Click);
+            // 
             // exitToolStripMenuItem
             // 
             this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
-            this.exitToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.exitToolStripMenuItem.Size = new System.Drawing.Size(112, 22);
             this.exitToolStripMenuItem.Text = "Exit";
             this.exitToolStripMenuItem.Click += new System.EventHandler(this.exitToolStripMenuItem_Click);
             // 
@@ -395,14 +434,6 @@
             this.sourceCodeToolStripMenuItem.Size = new System.Drawing.Size(166, 22);
             this.sourceCodeToolStripMenuItem.Text = "View source code";
             this.sourceCodeToolStripMenuItem.Click += new System.EventHandler(this.sourceCodeToolStripMenuItem_Click);
-            // 
-            // deleteHistoryFileAndRestartAppToolStripMenuItem
-            // 
-            this.deleteHistoryFileAndRestartAppToolStripMenuItem.BackColor = System.Drawing.Color.Red;
-            this.deleteHistoryFileAndRestartAppToolStripMenuItem.Name = "deleteHistoryFileAndRestartAppToolStripMenuItem";
-            this.deleteHistoryFileAndRestartAppToolStripMenuItem.Size = new System.Drawing.Size(247, 22);
-            this.deleteHistoryFileAndRestartAppToolStripMenuItem.Text = "Delete history file and restart app";
-            this.deleteHistoryFileAndRestartAppToolStripMenuItem.Click += new System.EventHandler(this.deleteHistoryFileAndRestartAppToolStripMenuItem_Click);
             // 
             // Form1
             // 
@@ -467,6 +498,9 @@
         private System.Windows.Forms.ToolStripMenuItem clearHistoryFileToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem clearCurrentHistoryToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem deleteHistoryFileAndRestartAppToolStripMenuItem;
+        private System.Windows.Forms.TextBox textBoxSrvPort;
+        private System.Windows.Forms.Button btnGenRandomPort;
+        private System.Windows.Forms.ToolTip toolTip1;
     }
 }
 

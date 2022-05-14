@@ -96,8 +96,6 @@ namespace ChatClientServer
             GetLocalIPs();
             ContextMenu contextMenu = new ContextMenu();
             comboBoxSrvIPSel.SelectedIndex = 0;
-            srvPort = GetRandomUnusedPort().ToString();
-            lblSrvPort.Text += srvPort;
             notifyIcon1.ContextMenu = contextMenu;
             contextMenu.MenuItems.Add("Exit", ExitApplication);
 
@@ -410,31 +408,64 @@ namespace ChatClientServer
 
         private void btnSrvStart_Click(object sender, EventArgs e)
         {
-            new Thread(() =>
+            if (textBoxSrvPort.Text != "" && !(Int32.Parse(srvPort) >= 65536))
             {
-                Thread.CurrentThread.IsBackground = true;
-
                 TcpListener listener = new TcpListener(IPAddress.Any, int.Parse(srvPort));
-                listener.Start();
-                client = listener.AcceptTcpClient();
-                STR = new StreamReader(client.GetStream());
-                STW = new StreamWriter(client.GetStream());
-                STW.AutoFlush = true;
-                backgroundWorker1.RunWorkerAsync();
-                backgroundWorker2.WorkerSupportsCancellation = true;
-            }).Start();
 
-            btnConnect.Enabled = false;
-            btnSrvStart.Enabled = false;
-            textBoxClientIP.Enabled = false;
-            textBoxClientPort.Enabled = false;
+                try
+                {
+                    listener.Start();
 
-            lblStatus.Font = new Font(lblStatus.Font.Name, 20);
-            lblStatus.ForeColor = Color.Green;
-            lblStatus.Text = "Server running on port:\n" + srvPort;
+                    new Thread(() =>
+                    {
+                        Thread.CurrentThread.IsBackground = true;
 
-            MessageBox.Show("Server started on port: " + srvPort + "\nYou can use your IP from a common subnet in your network to connect", "Success",
-                MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        client = listener.AcceptTcpClient();
+                        STR = new StreamReader(client.GetStream());
+                        STW = new StreamWriter(client.GetStream());
+                        STW.AutoFlush = true;
+                        backgroundWorker1.ReportProgress(100);
+                        backgroundWorker1.RunWorkerAsync();
+                        backgroundWorker2.WorkerSupportsCancellation = true;
+                    }).Start();
+
+                    btnConnect.Enabled = false;
+                    btnSrvStart.Enabled = false;
+                    btnGenRandomPort.Enabled = false;
+                    textBoxClientIP.Enabled = false;
+                    textBoxClientPort.Enabled = false;
+                    textBoxSrvPort.Enabled = false;
+
+                    lblStatus.Font = new Font(lblStatus.Font.Name, 20);
+                    lblStatus.ForeColor = Color.Green;
+                    lblStatus.Text = "Server running on port:\n" + srvPort;
+
+                    MessageBox.Show("Server started on port: " + srvPort + "\nYou can use your IP from a common subnet in your network to connect", "Success",
+                        MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+                catch (Exception ex)
+                {
+                    if (ex is SocketException)
+                    {
+                        MessageBox.Show("Entered port is already in use!\n\nTry again with another port", "Error",
+                            MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                }
+            }
+            else
+            {
+                if (textBoxSrvPort.Text == "")
+                {
+                    MessageBox.Show("Server port can not be empty!\n\nMake sure to enter a port, which is not exceeding 65535.\n\n" +
+                        "Or click the button below to auto-fill a random unused port", "Error",
+                        MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+                else
+                {
+                    MessageBox.Show("Entered port is out of range!\n\nMake sure the port is not exceeding 65535", "Error",
+                        MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
         }
 
         private void btnConnect_Click(object sender, EventArgs e)
@@ -449,10 +480,12 @@ namespace ChatClientServer
                     MessageBoxButtons.OK, MessageBoxIcon.Information);
                 textBoxClientIP.Enabled = false;
                 textBoxClientPort.Enabled = false;
+                textBoxSrvPort.Enabled = false;
                 btnConnect.Enabled = false;
                 comboBoxSrvIPSel.Enabled = false;
                 lblSrvPort.Enabled = false;
                 btnSrvStart.Enabled = false;
+                btnGenRandomPort.Enabled = false;
 
                 STW = new StreamWriter(client.GetStream());
                 STR = new StreamReader(client.GetStream());
@@ -489,6 +522,21 @@ namespace ChatClientServer
             }
         }
 
+        private void textBoxSrvPort_TextChanged(object sender, EventArgs e)
+        {
+            srvPort = textBoxSrvPort.Text;
+        }
+
+        private void btnGenRandomPort_Click(object sender, EventArgs e)
+        {
+            textBoxSrvPort.Text = GetRandomUnusedPort().ToString();
+        }
+
+        private void btnGenRandomPort_MouseHover(object sender, EventArgs e)
+        {
+            toolTip1.Show("Click to auto-fill a random unused port", btnGenRandomPort);
+        }
+
         private void comboBoxLocalIPSel_DropDownClosed(object sender, EventArgs e)
         {
             BeginInvoke(new Action(() => { comboBoxSrvIPSel.Select(0, 0); }));
@@ -521,6 +569,24 @@ namespace ChatClientServer
                 {
                     e.Handled = true;
                     btnConnect.PerformClick();
+                }
+            }
+        }
+
+        private void textBoxSrvPort_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (!(char.IsDigit(e.KeyChar) || e.KeyChar == (char)Keys.Back))
+            {
+                e.Handled = true;
+            }
+
+            if (e.KeyChar == (char)Keys.Enter)
+            {
+                if (textBoxSrvPort.Text != "")
+                {
+                    srvPort = textBoxSrvPort.Text;
+                    e.Handled = true;
+                    btnSrvStart.PerformClick();
                 }
             }
         }
