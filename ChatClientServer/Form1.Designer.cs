@@ -33,6 +33,7 @@
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.btnDisconnect = new System.Windows.Forms.Button();
             this.textBoxClientPort = new System.Windows.Forms.TextBox();
             this.lblPort = new System.Windows.Forms.Label();
             this.textBoxClientIP = new System.Windows.Forms.TextBox();
@@ -40,6 +41,7 @@
             this.lblIP = new System.Windows.Forms.Label();
             this.lblStatus = new System.Windows.Forms.Label();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.btnSrvStop = new System.Windows.Forms.Button();
             this.btnGenRandomPort = new System.Windows.Forms.Button();
             this.textBoxSrvPort = new System.Windows.Forms.TextBox();
             this.btnSrvStart = new System.Windows.Forms.Button();
@@ -49,7 +51,7 @@
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.richTextBoxChatInput = new System.Windows.Forms.RichTextBox();
             this.textBoxChatScreen = new System.Windows.Forms.RichTextBox();
-            this.buttonSendMsg = new System.Windows.Forms.Button();
+            this.btnSendMsg = new System.Windows.Forms.Button();
             this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
             this.backgroundWorker2 = new System.ComponentModel.BackgroundWorker();
             this.notifyIcon1 = new System.Windows.Forms.NotifyIcon(this.components);
@@ -105,6 +107,7 @@
             // 
             this.groupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.groupBox1.Controls.Add(this.btnDisconnect);
             this.groupBox1.Controls.Add(this.textBoxClientPort);
             this.groupBox1.Controls.Add(this.lblPort);
             this.groupBox1.Controls.Add(this.textBoxClientIP);
@@ -117,6 +120,20 @@
             this.groupBox1.TabIndex = 4;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Connect to a Server";
+            // 
+            // btnDisconnect
+            // 
+            this.btnDisconnect.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnDisconnect.Enabled = false;
+            this.btnDisconnect.Location = new System.Drawing.Point(150, 58);
+            this.btnDisconnect.Name = "btnDisconnect";
+            this.btnDisconnect.Size = new System.Drawing.Size(125, 45);
+            this.btnDisconnect.TabIndex = 6;
+            this.btnDisconnect.Text = "DISCONNECT";
+            this.btnDisconnect.UseVisualStyleBackColor = true;
+            this.btnDisconnect.Click += new System.EventHandler(this.btnDisconnect_Click);
             // 
             // textBoxClientPort
             // 
@@ -151,9 +168,9 @@
             this.btnConnect.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnConnect.Location = new System.Drawing.Point(16, 59);
+            this.btnConnect.Location = new System.Drawing.Point(16, 58);
             this.btnConnect.Name = "btnConnect";
-            this.btnConnect.Size = new System.Drawing.Size(260, 45);
+            this.btnConnect.Size = new System.Drawing.Size(128, 45);
             this.btnConnect.TabIndex = 3;
             this.btnConnect.Text = "CONNECT";
             this.btnConnect.UseVisualStyleBackColor = true;
@@ -183,6 +200,7 @@
             // 
             this.groupBox2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.groupBox2.Controls.Add(this.btnSrvStop);
             this.groupBox2.Controls.Add(this.btnGenRandomPort);
             this.groupBox2.Controls.Add(this.textBoxSrvPort);
             this.groupBox2.Controls.Add(this.btnSrvStart);
@@ -196,6 +214,19 @@
             this.groupBox2.TabIndex = 0;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Start a Server";
+            // 
+            // btnSrvStop
+            // 
+            this.btnSrvStop.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnSrvStop.Enabled = false;
+            this.btnSrvStop.Location = new System.Drawing.Point(115, 59);
+            this.btnSrvStop.Name = "btnSrvStop";
+            this.btnSrvStop.Size = new System.Drawing.Size(93, 45);
+            this.btnSrvStop.TabIndex = 9;
+            this.btnSrvStop.Text = "STOP";
+            this.btnSrvStop.UseVisualStyleBackColor = true;
+            this.btnSrvStop.Click += new System.EventHandler(this.btnSrvStop_Click);
             // 
             // btnGenRandomPort
             // 
@@ -228,7 +259,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.btnSrvStart.Location = new System.Drawing.Point(16, 59);
             this.btnSrvStart.Name = "btnSrvStart";
-            this.btnSrvStart.Size = new System.Drawing.Size(194, 45);
+            this.btnSrvStart.Size = new System.Drawing.Size(93, 45);
             this.btnSrvStart.TabIndex = 3;
             this.btnSrvStart.Text = "START";
             this.btnSrvStart.UseVisualStyleBackColor = true;
@@ -269,7 +300,7 @@
             // 
             this.tabPage2.Controls.Add(this.richTextBoxChatInput);
             this.tabPage2.Controls.Add(this.textBoxChatScreen);
-            this.tabPage2.Controls.Add(this.buttonSendMsg);
+            this.tabPage2.Controls.Add(this.btnSendMsg);
             this.tabPage2.Location = new System.Drawing.Point(4, 34);
             this.tabPage2.Name = "tabPage2";
             this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
@@ -304,18 +335,18 @@
             this.textBoxChatScreen.Text = "";
             this.textBoxChatScreen.TextChanged += new System.EventHandler(this.textBoxChatScreen_TextChanged);
             // 
-            // buttonSendMsg
+            // btnSendMsg
             // 
-            this.buttonSendMsg.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonSendMsg.Font = new System.Drawing.Font("Microsoft Sans Serif", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.buttonSendMsg.Location = new System.Drawing.Point(260, 338);
-            this.buttonSendMsg.Name = "buttonSendMsg";
-            this.buttonSendMsg.Size = new System.Drawing.Size(49, 45);
-            this.buttonSendMsg.TabIndex = 2;
-            this.buttonSendMsg.Text = "↵";
-            this.buttonSendMsg.TextAlign = System.Drawing.ContentAlignment.TopCenter;
-            this.buttonSendMsg.UseVisualStyleBackColor = true;
-            this.buttonSendMsg.Click += new System.EventHandler(this.buttonSendMsg_Click);
+            this.btnSendMsg.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnSendMsg.Font = new System.Drawing.Font("Microsoft Sans Serif", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnSendMsg.Location = new System.Drawing.Point(260, 338);
+            this.btnSendMsg.Name = "btnSendMsg";
+            this.btnSendMsg.Size = new System.Drawing.Size(49, 45);
+            this.btnSendMsg.TabIndex = 2;
+            this.btnSendMsg.Text = "↵";
+            this.btnSendMsg.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+            this.btnSendMsg.UseVisualStyleBackColor = true;
+            this.btnSendMsg.Click += new System.EventHandler(this.btnSendMsg_Click);
             // 
             // backgroundWorker1
             // 
@@ -469,27 +500,16 @@
         private System.Windows.Forms.TabPage tabPage1;
         private System.Windows.Forms.TabPage tabPage2;
         private System.Windows.Forms.GroupBox groupBox2;
-        private System.Windows.Forms.Button btnSrvStart;
         private System.Windows.Forms.Label lblSrvPort;
         public System.Windows.Forms.Label lblSrvIP;
-        private System.Windows.Forms.Label lblStatus;
         private System.Windows.Forms.GroupBox groupBox1;
-        private System.Windows.Forms.Button btnConnect;
         public System.Windows.Forms.Label lblIP;
-        private System.ComponentModel.BackgroundWorker backgroundWorker1;
-        private System.ComponentModel.BackgroundWorker backgroundWorker2;
-        private System.Windows.Forms.TextBox textBoxClientIP;
         private System.Windows.Forms.Label lblPort;
-        private System.Windows.Forms.TextBox textBoxClientPort;
-        private System.Windows.Forms.Button buttonSendMsg;
-        private System.Windows.Forms.RichTextBox textBoxChatScreen;
-        private System.Windows.Forms.RichTextBox richTextBoxChatInput;
-        private System.Windows.Forms.NotifyIcon notifyIcon1;
+        private System.Windows.Forms.Button btnSendMsg;
         private System.Windows.Forms.MenuStrip menuStrip1;
         private System.Windows.Forms.ToolStripMenuItem fileToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem exitToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem historyToolStripMenuItem;
-        private System.Windows.Forms.ComboBox comboBoxSrvIPSel;
         private System.Windows.Forms.ToolStripMenuItem helpToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem sourceCodeToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem historyFileToolStripMenuItem;
@@ -498,9 +518,22 @@
         private System.Windows.Forms.ToolStripMenuItem clearHistoryFileToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem clearCurrentHistoryToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem deleteHistoryFileAndRestartAppToolStripMenuItem;
-        private System.Windows.Forms.TextBox textBoxSrvPort;
-        private System.Windows.Forms.Button btnGenRandomPort;
         private System.Windows.Forms.ToolTip toolTip1;
+        public System.Windows.Forms.TextBox textBoxClientIP;
+        public System.Windows.Forms.TextBox textBoxClientPort;
+        public System.ComponentModel.BackgroundWorker backgroundWorker1;
+        public System.ComponentModel.BackgroundWorker backgroundWorker2;
+        public System.Windows.Forms.Label lblStatus;
+        public System.Windows.Forms.Button btnSrvStart;
+        public System.Windows.Forms.Button btnSrvStop;
+        public System.Windows.Forms.TextBox textBoxSrvPort;
+        public System.Windows.Forms.ComboBox comboBoxSrvIPSel;
+        public System.Windows.Forms.RichTextBox textBoxChatScreen;
+        public System.Windows.Forms.NotifyIcon notifyIcon1;
+        public System.Windows.Forms.RichTextBox richTextBoxChatInput;
+        public System.Windows.Forms.Button btnDisconnect;
+        public System.Windows.Forms.Button btnConnect;
+        public System.Windows.Forms.Button btnGenRandomPort;
     }
 }
 

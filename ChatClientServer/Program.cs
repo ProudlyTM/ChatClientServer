@@ -1,12 +1,19 @@
 ﻿using System;
-using System.Diagnostics;
-using System.Linq;
+using System.IO;
 using System.Windows.Forms;
 
 namespace ChatClientServer
 {
     static class Program
     {
+        public static StreamReader STR;
+        public static StreamWriter STW;
+
+        public static string srvPort, receive, textToSend, encryptedText, decryptedText, decryptedBuffer;
+
+        public static string chatHistory = Directory.GetCurrentDirectory() + "\\history.log";
+        public static string[] chatHistoryLines;
+
         /// <summary>
         /// The main entry point for the application.
         /// </summary>
