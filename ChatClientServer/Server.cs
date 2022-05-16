@@ -36,11 +36,11 @@ namespace ChatClientServer
 
                     srvThread.Start();
 
-                    form.EnableDisableControls(true);
-
                     form.lblStatus.Font = new Font(form.lblStatus.Font.Name, 20);
                     form.lblStatus.ForeColor = Color.Green;
                     form.lblStatus.Text = "Server running on port:\n" + Program.srvPort;
+
+                    form.EnableDisableControls(true, true);
 
                     MessageBox.Show("Server started on port: " + Program.srvPort + "\nYou can use your IP from a common subnet in your network to connect", "Success",
                         MessageBoxButtons.OK, MessageBoxIcon.Information);

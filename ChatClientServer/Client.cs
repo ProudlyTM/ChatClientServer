@@ -15,13 +15,11 @@ namespace ChatClientServer
         public static void ConnectToSrv()
         {
             client = new TcpClient();
+            IPEndPoint ipEndPoint = new IPEndPoint(IPAddress.Parse(form.textBoxClientIP.Text), int.Parse(form.textBoxClientPort.Text));
 
             try
             {
-                IPEndPoint ipEndPoint = new IPEndPoint(IPAddress.Parse(form.textBoxClientIP.Text), int.Parse(form.textBoxClientPort.Text));
                 client.Connect(ipEndPoint);
-                MessageBox.Show("Connected to server\n\n" + form.textBoxClientIP.Text.ToString() + ":" + form.textBoxClientPort.Text.ToString(), "Success",
-                    MessageBoxButtons.OK, MessageBoxIcon.Information);
 
                 Program.STW = new StreamWriter(client.GetStream());
                 Program.STR = new StreamReader(client.GetStream());
@@ -29,20 +27,14 @@ namespace ChatClientServer
                 form.backgroundWorker1.RunWorkerAsync();
                 form.backgroundWorker2.WorkerSupportsCancellation = true;
 
-                form.textBoxClientIP.Enabled = false;
-                form.textBoxClientPort.Enabled = false;
-                form.btnConnect.Enabled = false;
-                form.btnDisconnect.Enabled = true;
-                form.comboBoxSrvIPSel.Enabled = false;
-                form.textBoxSrvPort.Enabled = false;
-                form.btnSrvStart.Enabled = false;
-                form.btnSrvStop.Enabled = false;
-                form.btnGenRandomPort.Enabled = false;
-                //TODO: Switch above with form.EnableDisableControls when it's ready
-
                 form.lblStatus.Font = new Font(form.lblStatus.Font.Name, 20);
                 form.lblStatus.ForeColor = Color.Green;
                 form.lblStatus.Text = "Connected to\n" + form.textBoxClientIP.Text + ":" + form.textBoxClientPort.Text;
+
+                form.EnableDisableControls(true, false);
+
+                MessageBox.Show("Connected to\n" + form.textBoxClientIP.Text + ":" + form.textBoxClientPort.Text, "Success",
+                    MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
 
             catch

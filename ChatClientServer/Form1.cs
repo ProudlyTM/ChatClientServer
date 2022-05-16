@@ -39,29 +39,43 @@ namespace ChatClientServer
             }
         }
 
-        public void EnableDisableControls(bool AreControlsEnabled)
+        public void EnableDisableControls(bool AreControlsEnabled, bool IsSrv)
         {
-            //TODO: Add checks if DISCONNECT or STOP was clicked
-
             if (AreControlsEnabled)
             {
-                btnConnect.Enabled = false;
-                btnSrvStart.Enabled = false;
-                btnSrvStop.Enabled = true;
-                btnGenRandomPort.Enabled = false;
                 textBoxClientIP.Enabled = false;
                 textBoxClientPort.Enabled = false;
                 textBoxSrvPort.Enabled = false;
+                btnConnect.Enabled = false;
+                btnSrvStart.Enabled = false;
+                btnGenRandomPort.Enabled = false;
+                if (IsSrv)
+                {
+                    btnSrvStop.Enabled = true;
+                }
+                else
+                {
+                    btnDisconnect.Enabled = true;
+                    comboBoxSrvIPSel.Enabled = false;
+                }
             }
             else
             {
-                btnConnect.Enabled = true;
-                btnSrvStart.Enabled = true;
-                btnSrvStop.Enabled = false;
-                btnGenRandomPort.Enabled = true;
                 textBoxClientIP.Enabled = true;
                 textBoxClientPort.Enabled = true;
                 textBoxSrvPort.Enabled = true;
+                btnConnect.Enabled = true;
+                btnSrvStart.Enabled = true;
+                btnGenRandomPort.Enabled = true;
+                if (IsSrv)
+                {
+                    btnSrvStop.Enabled = false;
+                }
+                else
+                {
+                    btnDisconnect.Enabled = false;
+                    comboBoxSrvIPSel.Enabled = true;
+                }
 
                 lblStatus.Font = new Font(lblStatus.Font.Name, 28);
                 lblStatus.ForeColor = Color.Black;
@@ -169,8 +183,8 @@ namespace ChatClientServer
 
         private void btnSrvStop_Click(object sender, EventArgs e)
         {
-            //EnableDisableControls(false);
             //MessageBox.Show("Server stopped", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            //EnableDisableControls(false, true);
 
             //Commented out for now - reason: actually stop the server on clicking this button
         }
@@ -182,8 +196,8 @@ namespace ChatClientServer
 
         private void btnDisconnect_Click(object sender, EventArgs e)
         {
-            //EnableDisableControls(false);
             //MessageBox.Show("Disconnected from server", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            //EnableDisableControls(false, false);
 
             //Commented out for now - reason: actually disconnect from server on clicking this button
         }
