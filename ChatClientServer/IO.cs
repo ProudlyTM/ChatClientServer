@@ -31,7 +31,7 @@ namespace ChatClientServer
                     {
                         using (StreamWriter sw = File.AppendText(Program.chatHistory))
                         {
-                            sw.Write(StringCipher.Encrypt("control_line_DO_NOT_DELETE\n\n", formPassword.textBoxPassword.Text));
+                            sw.Write(Crypto.Encrypt("control_line_DO_NOT_DELETE\n\n", formPassword.textBoxPassword.Text));
                         }
 
                         MessageBox.Show("The history file will now be encrypted and decrypted using that password.", "Success",
@@ -78,11 +78,11 @@ namespace ChatClientServer
 
                             try
                             {
-                                if (StringCipher.Decrypt(File.ReadLines(Program.chatHistory).First(), formPassword.textBoxPassword.Text.ToString()) != "control_line_DO_NOT_DELETE")
+                                if (Crypto.Decrypt(File.ReadLines(Program.chatHistory).First(), formPassword.textBoxPassword.Text.ToString()) != "control_line_DO_NOT_DELETE")
                                 {
                                     foreach (var line in Program.chatHistoryLines)
                                     {
-                                        Program.decryptedText = StringCipher.Decrypt(line.ToString(), formPassword.textBoxPassword.Text);
+                                        Program.decryptedText = Crypto.Decrypt(line.ToString(), formPassword.textBoxPassword.Text);
 
                                         form.textBoxChatScreen.Text += Program.decryptedText;
                                     }
@@ -160,7 +160,7 @@ namespace ChatClientServer
                     {
                         using (StreamWriter sw = File.CreateText(Program.chatHistory))
                         {
-                            sw.Write(StringCipher.Encrypt("control_line_DO_NOT_DELETE\n\n", formPassword.textBoxPassword.Text));
+                            sw.Write(Crypto.Encrypt("control_line_DO_NOT_DELETE\n\n", formPassword.textBoxPassword.Text));
                         }
                     }
                     catch
@@ -207,14 +207,14 @@ namespace ChatClientServer
 
                             try
                             {
-                                Program.decryptedBuffer = StringCipher.Decrypt(encryptedBuffer, formPassword.textBoxPassword.Text) + receiveFormatted;
+                                Program.decryptedBuffer = Crypto.Decrypt(encryptedBuffer, formPassword.textBoxPassword.Text) + receiveFormatted;
                             }
                             catch
                             {
                                 Program.decryptedBuffer = encryptedBuffer;
                             }
 
-                            Program.encryptedText = StringCipher.Encrypt(Program.decryptedBuffer, formPassword.textBoxPassword.Text);
+                            Program.encryptedText = Crypto.Encrypt(Program.decryptedBuffer, formPassword.textBoxPassword.Text);
 
                             using (StreamWriter sw = File.CreateText(Program.chatHistory))
                             {
@@ -262,8 +262,8 @@ namespace ChatClientServer
                 if (File.ReadLines(Program.chatHistory).First() != "control_line_DO_NOT_DELETE")
                 {
                     string encryptedBuffer = File.ReadAllText(Program.chatHistory);
-                    string decryptedBuffer = StringCipher.Decrypt(encryptedBuffer, formPassword.textBoxPassword.Text) + textToSendFormatted;
-                    Program.encryptedText = StringCipher.Encrypt(decryptedBuffer, formPassword.textBoxPassword.Text);
+                    string decryptedBuffer = Crypto.Decrypt(encryptedBuffer, formPassword.textBoxPassword.Text) + textToSendFormatted;
+                    Program.encryptedText = Crypto.Encrypt(decryptedBuffer, formPassword.textBoxPassword.Text);
 
                     using (StreamWriter sw = File.CreateText(Program.chatHistory))
                     {
