@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Drawing;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Windows.Forms;
@@ -12,6 +13,9 @@ namespace ChatClientServer
         private static Form1 form = Form1.Self;
 
         private static FormPassword formPassword = new FormPassword();
+
+        private static string localDateTimeFormat = CultureInfo.CurrentCulture.DateTimeFormat.ShortDatePattern + " " +
+            CultureInfo.CurrentCulture.DateTimeFormat.ShortTimePattern;
 
         public static void ChatHistoryFileCheck()
         {
@@ -195,7 +199,7 @@ namespace ChatClientServer
                 try
                 {
                     Program.receive = Program.STR.ReadLine();
-                    string receiveFormatted = $"[{DateTime.Now:dd/MM/yyyy HH:mm}]\nPerson B: {Program.receive}\n\n";
+                    string receiveFormatted = $"[{DateTime.Now.ToString(localDateTimeFormat)}]\nPerson B: {Program.receive}\n\n";
 
                     form.textBoxChatScreen.Invoke(new MethodInvoker(delegate ()
                     {
@@ -251,7 +255,7 @@ namespace ChatClientServer
             if (Client.client.Connected)
             {
                 Program.STW.WriteLine(Program.textToSend);
-                string textToSendFormatted = $"[{DateTime.Now:dd/MM/yyyy HH:mm}]\nPerson A: {Program.textToSend}\n\n";
+                string textToSendFormatted = $"[{DateTime.Now.ToString(localDateTimeFormat)}]\nPerson A: {Program.textToSend}\n\n";
 
                 form.textBoxChatScreen.Invoke(new MethodInvoker(delegate ()
                 {
