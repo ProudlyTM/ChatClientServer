@@ -35,6 +35,8 @@ namespace ChatClientServer
 
                 MessageBox.Show("Connected to\n" + form.textBoxClientIP.Text + ":" + form.textBoxClientPort.Text, "Success",
                     MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                form.tabControl1.SelectedIndex = 1;
             }
 
             catch

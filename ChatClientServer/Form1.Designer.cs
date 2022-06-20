@@ -496,7 +496,6 @@
         }
 
         #endregion
-        private System.Windows.Forms.TabControl tabControl1;
         private System.Windows.Forms.TabPage tabPage1;
         private System.Windows.Forms.TabPage tabPage2;
         private System.Windows.Forms.GroupBox groupBox2;
@@ -534,6 +533,7 @@
         public System.Windows.Forms.Button btnDisconnect;
         public System.Windows.Forms.Button btnConnect;
         public System.Windows.Forms.Button btnGenRandomPort;
+        public System.Windows.Forms.TabControl tabControl1;
     }
 }
 
