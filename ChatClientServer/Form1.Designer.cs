@@ -49,7 +49,10 @@
             this.comboBoxSrvIPSel = new System.Windows.Forms.ComboBox();
             this.lblSrvIP = new System.Windows.Forms.Label();
             this.tabPage2 = new System.Windows.Forms.TabPage();
+            this.lblNick = new System.Windows.Forms.Label();
+            this.btnSetNick = new System.Windows.Forms.Button();
             this.richTextBoxChatInput = new System.Windows.Forms.RichTextBox();
+            this.textBoxNick = new System.Windows.Forms.TextBox();
             this.textBoxChatScreen = new System.Windows.Forms.RichTextBox();
             this.btnSendMsg = new System.Windows.Forms.Button();
             this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
@@ -68,9 +71,6 @@
             this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.sourceCodeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
-            this.btnSetNick = new System.Windows.Forms.Button();
-            this.textBoxNick = new System.Windows.Forms.TextBox();
-            this.lblNick = new System.Windows.Forms.Label();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.groupBox1.SuspendLayout();
@@ -314,6 +314,26 @@
             this.tabPage2.Text = "Chat";
             this.tabPage2.UseVisualStyleBackColor = true;
             // 
+            // lblNick
+            // 
+            this.lblNick.AutoSize = true;
+            this.lblNick.Location = new System.Drawing.Point(13, 8);
+            this.lblNick.Name = "lblNick";
+            this.lblNick.Size = new System.Drawing.Size(66, 15);
+            this.lblNick.TabIndex = 7;
+            this.lblNick.Text = "Nickname:";
+            // 
+            // btnSetNick
+            // 
+            this.btnSetNick.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.btnSetNick.Location = new System.Drawing.Point(191, 3);
+            this.btnSetNick.Name = "btnSetNick";
+            this.btnSetNick.Size = new System.Drawing.Size(33, 25);
+            this.btnSetNick.TabIndex = 4;
+            this.btnSetNick.Text = "Set";
+            this.btnSetNick.UseVisualStyleBackColor = true;
+            this.btnSetNick.Click += new System.EventHandler(this.btnSetNick_Click);
+            // 
             // richTextBoxChatInput
             // 
             this.richTextBoxChatInput.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
@@ -325,6 +345,15 @@
             this.richTextBoxChatInput.TabIndex = 6;
             this.richTextBoxChatInput.Text = "";
             this.richTextBoxChatInput.KeyDown += new System.Windows.Forms.KeyEventHandler(this.richTextBoxChatInput_KeyDown);
+            // 
+            // textBoxNick
+            // 
+            this.textBoxNick.Location = new System.Drawing.Point(85, 5);
+            this.textBoxNick.Name = "textBoxNick";
+            this.textBoxNick.Size = new System.Drawing.Size(100, 21);
+            this.textBoxNick.TabIndex = 3;
+            this.textBoxNick.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.textBoxNick.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textBoxNick_KeyPress);
             // 
             // textBoxChatScreen
             // 
@@ -364,8 +393,8 @@
             // 
             // notifyIcon1
             // 
-            this.notifyIcon1.BalloonTipText = "The app has been minimized to the system tray. To exit, right click on the system" +
-    " tray icon.\r\n";
+            this.notifyIcon1.BalloonTipText = "The app has been minimized to the system tray.\r\nTo exit, right click on the syste" +
+    "m tray icon.\r\n\r\nThis message will not appear again.";
             this.notifyIcon1.BalloonTipTitle = "Minimized to tray";
             this.notifyIcon1.Icon = ((System.Drawing.Icon)(resources.GetObject("notifyIcon1.Icon")));
             this.notifyIcon1.Text = "Chat Client/Server";
@@ -470,35 +499,6 @@
             this.sourceCodeToolStripMenuItem.Size = new System.Drawing.Size(166, 22);
             this.sourceCodeToolStripMenuItem.Text = "View source code";
             this.sourceCodeToolStripMenuItem.Click += new System.EventHandler(this.sourceCodeToolStripMenuItem_Click);
-            // 
-            // btnSetNick
-            // 
-            this.btnSetNick.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.btnSetNick.Location = new System.Drawing.Point(191, 3);
-            this.btnSetNick.Name = "btnSetNick";
-            this.btnSetNick.Size = new System.Drawing.Size(33, 25);
-            this.btnSetNick.TabIndex = 4;
-            this.btnSetNick.Text = "Set";
-            this.btnSetNick.UseVisualStyleBackColor = true;
-            this.btnSetNick.Click += new System.EventHandler(this.btnSetNick_Click);
-            // 
-            // textBoxNick
-            // 
-            this.textBoxNick.Location = new System.Drawing.Point(85, 5);
-            this.textBoxNick.Name = "textBoxNick";
-            this.textBoxNick.Size = new System.Drawing.Size(100, 21);
-            this.textBoxNick.TabIndex = 3;
-            this.textBoxNick.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            this.textBoxNick.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textBoxNick_KeyPress);
-            // 
-            // lblNick
-            // 
-            this.lblNick.AutoSize = true;
-            this.lblNick.Location = new System.Drawing.Point(13, 8);
-            this.lblNick.Name = "lblNick";
-            this.lblNick.Size = new System.Drawing.Size(66, 15);
-            this.lblNick.TabIndex = 7;
-            this.lblNick.Text = "Nickname:";
             // 
             // Form1
             // 

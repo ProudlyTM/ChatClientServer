@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel;
+using System.Configuration;
 using System.Diagnostics;
 using System.Drawing;
 using System.Windows.Forms;
@@ -35,7 +36,12 @@ namespace ChatClientServer
             {
                 e.Cancel = true;
                 Hide();
-                notifyIcon1.ShowBalloonTip(1000);
+
+                if (ConfigurationManager.AppSettings["SysTrayNotification"] == "enabled")
+                {
+                    notifyIcon1.ShowBalloonTip(1000);
+                    IO.AddOrUpdateAppSettings("SysTrayNotification", "disabled");
+                }
             }
         }
 
