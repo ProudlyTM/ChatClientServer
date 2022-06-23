@@ -68,6 +68,9 @@
             this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.sourceCodeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
+            this.btnSetNick = new System.Windows.Forms.Button();
+            this.textBoxNick = new System.Windows.Forms.TextBox();
+            this.lblNick = new System.Windows.Forms.Label();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.groupBox1.SuspendLayout();
@@ -123,9 +126,7 @@
             // 
             // btnDisconnect
             // 
-            this.btnDisconnect.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnDisconnect.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btnDisconnect.Enabled = false;
             this.btnDisconnect.Location = new System.Drawing.Point(150, 58);
             this.btnDisconnect.Name = "btnDisconnect";
@@ -137,8 +138,7 @@
             // 
             // textBoxClientPort
             // 
-            this.textBoxClientPort.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
+            this.textBoxClientPort.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.textBoxClientPort.Location = new System.Drawing.Point(216, 26);
             this.textBoxClientPort.MaxLength = 5;
             this.textBoxClientPort.Name = "textBoxClientPort";
@@ -148,6 +148,7 @@
             // 
             // lblPort
             // 
+            this.lblPort.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.lblPort.AutoSize = true;
             this.lblPort.Location = new System.Drawing.Point(175, 29);
             this.lblPort.Name = "lblPort";
@@ -157,6 +158,8 @@
             // 
             // textBoxClientIP
             // 
+            this.textBoxClientIP.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.textBoxClientIP.Location = new System.Drawing.Point(34, 26);
             this.textBoxClientIP.Name = "textBoxClientIP";
             this.textBoxClientIP.Size = new System.Drawing.Size(141, 26);
@@ -189,7 +192,7 @@
             // 
             this.lblStatus.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.lblStatus.Font = new System.Drawing.Font("Microsoft Sans Serif", 27.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblStatus.Location = new System.Drawing.Point(11, 144);
+            this.lblStatus.Location = new System.Drawing.Point(11, 146);
             this.lblStatus.Name = "lblStatus";
             this.lblStatus.Size = new System.Drawing.Size(293, 113);
             this.lblStatus.TabIndex = 1;
@@ -208,7 +211,7 @@
             this.groupBox2.Controls.Add(this.comboBoxSrvIPSel);
             this.groupBox2.Controls.Add(this.lblSrvIP);
             this.groupBox2.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.groupBox2.Location = new System.Drawing.Point(12, 264);
+            this.groupBox2.Location = new System.Drawing.Point(12, 267);
             this.groupBox2.Name = "groupBox2";
             this.groupBox2.Size = new System.Drawing.Size(292, 116);
             this.groupBox2.TabIndex = 0;
@@ -217,8 +220,7 @@
             // 
             // btnSrvStop
             // 
-            this.btnSrvStop.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnSrvStop.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btnSrvStop.Enabled = false;
             this.btnSrvStop.Location = new System.Drawing.Point(115, 59);
             this.btnSrvStop.Name = "btnSrvStop";
@@ -230,6 +232,7 @@
             // 
             // btnGenRandomPort
             // 
+            this.btnGenRandomPort.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btnGenRandomPort.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnGenRandomPort.Location = new System.Drawing.Point(216, 59);
             this.btnGenRandomPort.Name = "btnGenRandomPort";
@@ -242,8 +245,7 @@
             // 
             // textBoxSrvPort
             // 
-            this.textBoxSrvPort.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
+            this.textBoxSrvPort.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.textBoxSrvPort.Location = new System.Drawing.Point(216, 26);
             this.textBoxSrvPort.MaxLength = 5;
             this.textBoxSrvPort.Name = "textBoxSrvPort";
@@ -298,7 +300,10 @@
             // 
             // tabPage2
             // 
+            this.tabPage2.Controls.Add(this.lblNick);
+            this.tabPage2.Controls.Add(this.btnSetNick);
             this.tabPage2.Controls.Add(this.richTextBoxChatInput);
+            this.tabPage2.Controls.Add(this.textBoxNick);
             this.tabPage2.Controls.Add(this.textBoxChatScreen);
             this.tabPage2.Controls.Add(this.btnSendMsg);
             this.tabPage2.Location = new System.Drawing.Point(4, 34);
@@ -327,10 +332,10 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.textBoxChatScreen.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.textBoxChatScreen.Location = new System.Drawing.Point(9, 7);
+            this.textBoxChatScreen.Location = new System.Drawing.Point(9, 30);
             this.textBoxChatScreen.Name = "textBoxChatScreen";
             this.textBoxChatScreen.ReadOnly = true;
-            this.textBoxChatScreen.Size = new System.Drawing.Size(300, 325);
+            this.textBoxChatScreen.Size = new System.Drawing.Size(300, 302);
             this.textBoxChatScreen.TabIndex = 3;
             this.textBoxChatScreen.Text = "";
             this.textBoxChatScreen.TextChanged += new System.EventHandler(this.textBoxChatScreen_TextChanged);
@@ -466,6 +471,33 @@
             this.sourceCodeToolStripMenuItem.Text = "View source code";
             this.sourceCodeToolStripMenuItem.Click += new System.EventHandler(this.sourceCodeToolStripMenuItem_Click);
             // 
+            // btnSetNick
+            // 
+            this.btnSetNick.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.btnSetNick.Location = new System.Drawing.Point(191, 3);
+            this.btnSetNick.Name = "btnSetNick";
+            this.btnSetNick.Size = new System.Drawing.Size(33, 25);
+            this.btnSetNick.TabIndex = 4;
+            this.btnSetNick.Text = "Set";
+            this.btnSetNick.UseVisualStyleBackColor = true;
+            // 
+            // textBoxNick
+            // 
+            this.textBoxNick.Location = new System.Drawing.Point(85, 5);
+            this.textBoxNick.Name = "textBoxNick";
+            this.textBoxNick.Size = new System.Drawing.Size(100, 21);
+            this.textBoxNick.TabIndex = 3;
+            this.textBoxNick.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            // 
+            // lblNick
+            // 
+            this.lblNick.AutoSize = true;
+            this.lblNick.Location = new System.Drawing.Point(13, 8);
+            this.lblNick.Name = "lblNick";
+            this.lblNick.Size = new System.Drawing.Size(66, 15);
+            this.lblNick.TabIndex = 7;
+            this.lblNick.Text = "Nickname:";
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -488,6 +520,7 @@
             this.groupBox2.ResumeLayout(false);
             this.groupBox2.PerformLayout();
             this.tabPage2.ResumeLayout(false);
+            this.tabPage2.PerformLayout();
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
             this.ResumeLayout(false);
@@ -534,6 +567,9 @@
         public System.Windows.Forms.Button btnConnect;
         public System.Windows.Forms.Button btnGenRandomPort;
         public System.Windows.Forms.TabControl tabControl1;
+        private System.Windows.Forms.Button btnSetNick;
+        private System.Windows.Forms.TextBox textBoxNick;
+        private System.Windows.Forms.Label lblNick;
     }
 }
 
