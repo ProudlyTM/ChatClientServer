@@ -108,6 +108,7 @@ namespace ChatClientServer
             contextMenu.MenuItems.Add("Exit", ExitApplication);
 
             IO.ChatHistoryFileCheck();
+            IO.GenOrLoadNick();
         }
 
         private void backgroundWorker1_DoWork(object sender, DoWorkEventArgs e)
@@ -273,6 +274,20 @@ namespace ChatClientServer
                     e.Handled = true;
                     btnSrvStart.PerformClick();
                 }
+            }
+        }
+
+        private void btnSetNick_Click(object sender, EventArgs e)
+        {
+            IO.SetNick();
+        }
+
+        private void textBoxNick_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (e.KeyChar == (char)Keys.Enter)
+            {
+                e.Handled = true;
+                btnSetNick.PerformClick();
             }
         }
     }

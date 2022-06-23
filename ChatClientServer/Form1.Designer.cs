@@ -480,6 +480,7 @@
             this.btnSetNick.TabIndex = 4;
             this.btnSetNick.Text = "Set";
             this.btnSetNick.UseVisualStyleBackColor = true;
+            this.btnSetNick.Click += new System.EventHandler(this.btnSetNick_Click);
             // 
             // textBoxNick
             // 
@@ -488,6 +489,7 @@
             this.textBoxNick.Size = new System.Drawing.Size(100, 21);
             this.textBoxNick.TabIndex = 3;
             this.textBoxNick.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.textBoxNick.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textBoxNick_KeyPress);
             // 
             // lblNick
             // 
@@ -567,9 +569,9 @@
         public System.Windows.Forms.Button btnConnect;
         public System.Windows.Forms.Button btnGenRandomPort;
         public System.Windows.Forms.TabControl tabControl1;
-        private System.Windows.Forms.Button btnSetNick;
-        private System.Windows.Forms.TextBox textBoxNick;
         private System.Windows.Forms.Label lblNick;
+        public System.Windows.Forms.TextBox textBoxNick;
+        public System.Windows.Forms.Button btnSetNick;
     }
 }
 

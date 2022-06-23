@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Configuration;
 using System.Diagnostics;
 using System.Drawing;
 using System.Globalization;
@@ -16,6 +17,32 @@ namespace ChatClientServer
 
         private static string localDateTimeFormat = CultureInfo.CurrentCulture.DateTimeFormat.ShortDatePattern + " " +
             CultureInfo.CurrentCulture.DateTimeFormat.ShortTimePattern;
+
+        public static void AddOrUpdateAppSettings(string key, string value)
+        {
+            try
+            {
+                var configFile = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
+                var settings = configFile.AppSettings.Settings;
+
+                if (settings[key] == null)
+                {
+                    settings.Add(key, value);
+                }
+                else
+                {
+                    settings[key].Value = value;
+                }
+
+                configFile.Save(ConfigurationSaveMode.Modified);
+                ConfigurationManager.RefreshSection(configFile.AppSettings.SectionInformation.Name);
+            }
+
+            catch (ConfigurationErrorsException)
+            {
+                Console.WriteLine("Error writing app settings");
+            }
+        }
 
         public static void ChatHistoryFileCheck()
         {
@@ -192,6 +219,38 @@ namespace ChatClientServer
             }
         }
 
+        public static void GenOrLoadNick()
+        {
+            if (ConfigurationManager.AppSettings["Nick"] == "")
+            {
+                Random rand = new Random();
+
+                form.textBoxNick.Text = $"user_{rand.Next(10000000, 99999999)}";
+
+                AddOrUpdateAppSettings("Nick", form.textBoxNick.Text);
+            }
+            else
+            {
+                form.textBoxNick.Text = ConfigurationManager.AppSettings["Nick"];
+            }
+        }
+
+        public static void SetNick()
+        {
+            if (form.textBoxNick.Text != "")
+            {
+                AddOrUpdateAppSettings("Nick", form.textBoxNick.Text);
+
+                MessageBox.Show("Successfully set nickname!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                form.ActiveControl = form.richTextBoxChatInput;
+            }
+            else
+            {
+                MessageBox.Show("Could not set empty nickname!\n\nTry again", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
         public static void ReceiveFromClient()
         {
             while (Client.client.Connected)
@@ -199,7 +258,7 @@ namespace ChatClientServer
                 try
                 {
                     Program.receive = Program.STR.ReadLine();
-                    string receiveFormatted = $"[{DateTime.Now.ToString(localDateTimeFormat)}]\nPerson B: {Program.receive}\n\n";
+                    string receiveFormatted = $"[{DateTime.Now.ToString(localDateTimeFormat)}]\n{Program.receive}\n\n";
 
                     form.textBoxChatScreen.Invoke(new MethodInvoker(delegate ()
                     {
@@ -254,8 +313,8 @@ namespace ChatClientServer
         {
             if (Client.client.Connected)
             {
-                Program.STW.WriteLine(Program.textToSend);
-                string textToSendFormatted = $"[{DateTime.Now.ToString(localDateTimeFormat)}]\nPerson A: {Program.textToSend}\n\n";
+                Program.STW.WriteLine($"{form.textBoxNick.Text}: {Program.textToSend}");
+                string textToSendFormatted = $"[{DateTime.Now.ToString(localDateTimeFormat)}]\n{form.textBoxNick.Text}: {Program.textToSend}\n\n";
 
                 form.textBoxChatScreen.Invoke(new MethodInvoker(delegate ()
                 {
