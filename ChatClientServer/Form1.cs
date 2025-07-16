@@ -57,11 +57,12 @@ namespace ChatClientServer
                 btnGenRandomPort.Enabled = false;
                 if (IsSrv)
                 {
-                    btnSrvStop.Enabled = true;
+                    // Temporarily inverted until stop logic has been made
+                    btnSrvStop.Enabled = false;
                 }
                 else
                 {
-                    btnDisconnect.Enabled = true;
+                    btnDisconnect.Enabled = false;
                     comboBoxSrvIPSel.Enabled = false;
                 }
             }

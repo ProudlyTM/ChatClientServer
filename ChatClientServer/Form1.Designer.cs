@@ -160,9 +160,9 @@
             // 
             this.textBoxClientIP.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.textBoxClientIP.Location = new System.Drawing.Point(34, 26);
+            this.textBoxClientIP.Location = new System.Drawing.Point(39, 26);
             this.textBoxClientIP.Name = "textBoxClientIP";
-            this.textBoxClientIP.Size = new System.Drawing.Size(141, 26);
+            this.textBoxClientIP.Size = new System.Drawing.Size(136, 26);
             this.textBoxClientIP.TabIndex = 4;
             this.textBoxClientIP.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textBoxClientIPPort_KeyPress);
             // 
@@ -184,9 +184,9 @@
             this.lblIP.AutoSize = true;
             this.lblIP.Location = new System.Drawing.Point(12, 29);
             this.lblIP.Name = "lblIP";
-            this.lblIP.Size = new System.Drawing.Size(24, 20);
+            this.lblIP.Size = new System.Drawing.Size(28, 20);
             this.lblIP.TabIndex = 0;
-            this.lblIP.Text = "IP";
+            this.lblIP.Text = "IP:";
             // 
             // lblStatus
             // 
@@ -210,13 +210,13 @@
             this.groupBox2.Controls.Add(this.lblSrvPort);
             this.groupBox2.Controls.Add(this.comboBoxSrvIPSel);
             this.groupBox2.Controls.Add(this.lblSrvIP);
-            this.groupBox2.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.groupBox2.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.groupBox2.Location = new System.Drawing.Point(12, 267);
             this.groupBox2.Name = "groupBox2";
             this.groupBox2.Size = new System.Drawing.Size(292, 116);
             this.groupBox2.TabIndex = 0;
             this.groupBox2.TabStop = false;
-            this.groupBox2.Text = "Start a Server";
+            this.groupBox2.Text = "Start a Server (Listed IPs Only For Reference)";
             // 
             // btnSrvStop
             // 
@@ -250,7 +250,7 @@
             this.textBoxSrvPort.MaxLength = 5;
             this.textBoxSrvPort.Name = "textBoxSrvPort";
             this.textBoxSrvPort.ShortcutsEnabled = false;
-            this.textBoxSrvPort.Size = new System.Drawing.Size(59, 26);
+            this.textBoxSrvPort.Size = new System.Drawing.Size(59, 22);
             this.textBoxSrvPort.TabIndex = 6;
             this.textBoxSrvPort.TextChanged += new System.EventHandler(this.textBoxSrvPort_TextChanged);
             this.textBoxSrvPort.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textBoxSrvPort_KeyPress);
@@ -271,7 +271,8 @@
             // 
             this.lblSrvPort.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.lblSrvPort.AutoSize = true;
-            this.lblSrvPort.Location = new System.Drawing.Point(175, 29);
+            this.lblSrvPort.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.lblSrvPort.Location = new System.Drawing.Point(175, 28);
             this.lblSrvPort.Name = "lblSrvPort";
             this.lblSrvPort.Size = new System.Drawing.Size(46, 20);
             this.lblSrvPort.TabIndex = 2;
@@ -283,20 +284,21 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.comboBoxSrvIPSel.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBoxSrvIPSel.FormattingEnabled = true;
-            this.comboBoxSrvIPSel.Location = new System.Drawing.Point(34, 25);
+            this.comboBoxSrvIPSel.Location = new System.Drawing.Point(39, 25);
             this.comboBoxSrvIPSel.Name = "comboBoxSrvIPSel";
-            this.comboBoxSrvIPSel.Size = new System.Drawing.Size(141, 28);
+            this.comboBoxSrvIPSel.Size = new System.Drawing.Size(136, 24);
             this.comboBoxSrvIPSel.TabIndex = 1;
             this.comboBoxSrvIPSel.DropDownClosed += new System.EventHandler(this.comboBoxLocalIPSel_DropDownClosed);
             // 
             // lblSrvIP
             // 
             this.lblSrvIP.AutoSize = true;
-            this.lblSrvIP.Location = new System.Drawing.Point(12, 29);
+            this.lblSrvIP.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.lblSrvIP.Location = new System.Drawing.Point(13, 28);
             this.lblSrvIP.Name = "lblSrvIP";
-            this.lblSrvIP.Size = new System.Drawing.Size(24, 20);
+            this.lblSrvIP.Size = new System.Drawing.Size(28, 20);
             this.lblSrvIP.TabIndex = 0;
-            this.lblSrvIP.Text = "IP";
+            this.lblSrvIP.Text = "IP:";
             // 
             // tabPage2
             // 

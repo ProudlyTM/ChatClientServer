@@ -15,15 +15,17 @@ namespace ChatClientServer
         public static void ConnectToSrv()
         {
             client = new TcpClient();
-            IPEndPoint ipEndPoint = new IPEndPoint(IPAddress.Parse(form.textBoxClientIP.Text), int.Parse(form.textBoxClientPort.Text));
 
             try
             {
+                IPEndPoint ipEndPoint = new IPEndPoint(IPAddress.Parse(form.textBoxClientIP.Text), int.Parse(form.textBoxClientPort.Text));
+
                 client.Connect(ipEndPoint);
 
                 Program.STW = new StreamWriter(client.GetStream());
                 Program.STR = new StreamReader(client.GetStream());
                 Program.STW.AutoFlush = true;
+
                 form.backgroundWorker1.RunWorkerAsync();
                 form.backgroundWorker2.WorkerSupportsCancellation = true;
 
@@ -31,7 +33,14 @@ namespace ChatClientServer
                 form.lblStatus.ForeColor = Color.Green;
                 form.lblStatus.Text = "Connected to\n" + form.textBoxClientIP.Text + ":" + form.textBoxClientPort.Text;
 
-                form.EnableDisableControls(true, false);
+                if (form.textBoxClientIP.Text != "127.0.0.1")
+                {
+                    form.EnableDisableControls(true, false);
+                }
+                else
+                {
+                    form.EnableDisableControls(true, true);
+                }
 
                 MessageBox.Show("Connected to\n" + form.textBoxClientIP.Text + ":" + form.textBoxClientPort.Text, "Success",
                     MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -41,7 +50,7 @@ namespace ChatClientServer
 
             catch
             {
-                MessageBox.Show("Invalid IP address specified\n\nCould not connect to server", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Invalid IP address\n\nCould not connect to server", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
     }
