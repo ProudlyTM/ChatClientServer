@@ -11,6 +11,8 @@ namespace ChatClientServer
     {
         public static Form1 Self;
 
+        public bool IsSrv;
+
         protected override void OnFormClosing(FormClosingEventArgs e)
         {
             if (e.CloseReason == CloseReason.WindowsShutDown || e.CloseReason == CloseReason.ApplicationExitCall)
@@ -49,40 +51,43 @@ namespace ChatClientServer
         {
             if (AreControlsEnabled)
             {
+                this.IsSrv = IsSrv;
+
                 textBoxClientIP.Enabled = false;
                 textBoxClientPort.Enabled = false;
                 textBoxSrvPort.Enabled = false;
                 btnConnect.Enabled = false;
                 btnSrvStart.Enabled = false;
                 btnGenRandomPort.Enabled = false;
+                comboBoxSrvIPSel.Enabled = false;
+
                 if (IsSrv)
                 {
-                    // Temporarily inverted until stop logic has been made
-                    btnSrvStop.Enabled = false;
+                    btnSrvStop.Enabled = true;
+                    btnDisconnect.Enabled = false;
                 }
                 else
                 {
-                    btnDisconnect.Enabled = false;
-                    comboBoxSrvIPSel.Enabled = false;
+                    btnDisconnect.Enabled = true;
+                    btnSrvStop.Enabled = false;
                 }
             }
             else
             {
+                if (!IsSrv)
+                {
+                    this.IsSrv = false;
+                }
+
                 textBoxClientIP.Enabled = true;
                 textBoxClientPort.Enabled = true;
                 textBoxSrvPort.Enabled = true;
                 btnConnect.Enabled = true;
                 btnSrvStart.Enabled = true;
                 btnGenRandomPort.Enabled = true;
-                if (IsSrv)
-                {
-                    btnSrvStop.Enabled = false;
-                }
-                else
-                {
-                    btnDisconnect.Enabled = false;
-                    comboBoxSrvIPSel.Enabled = true;
-                }
+                btnSrvStop.Enabled = false;
+                btnDisconnect.Enabled = false;
+                comboBoxSrvIPSel.Enabled = true;
 
                 lblStatus.Font = new Font(lblStatus.Font.Name, 28);
                 lblStatus.ForeColor = Color.Black;
@@ -107,12 +112,14 @@ namespace ChatClientServer
             WindowState = Properties.Settings.Default.F1State;
             Location = Properties.Settings.Default.F1Location;
             Size = Properties.Settings.Default.F1Size;
-
             Server.GetLocalIPs();
             ContextMenu contextMenu = new ContextMenu();
             comboBoxSrvIPSel.SelectedIndex = 0;
             notifyIcon1.ContextMenu = contextMenu;
             contextMenu.MenuItems.Add("Exit", ExitApplication);
+
+            backgroundWorker1.WorkerSupportsCancellation = true;
+            backgroundWorker2.WorkerSupportsCancellation = true;
 
             IO.ChatHistoryFileCheck();
             IO.GenOrLoadNick();
@@ -120,12 +127,79 @@ namespace ChatClientServer
 
         private void backgroundWorker1_DoWork(object sender, DoWorkEventArgs e)
         {
-            IO.ReceiveFromClient();
+            BackgroundWorker worker = sender as BackgroundWorker;
+
+            try
+            {
+                while (!worker.CancellationPending && Client.client?.Connected == true)
+                {
+                    IO.ReceiveFromClient();
+
+                    if (worker.CancellationPending)
+                    {
+                        e.Cancel = true;
+                        break;
+                    }
+
+                    if (Client.client?.Connected != true)
+                    {
+                        break;
+                    }
+
+                    System.Threading.Thread.Sleep(10);
+                }
+            }
+            catch (Exception)
+            {
+                if (worker.CancellationPending)
+                {
+                    e.Cancel = true;
+                }
+            }
         }
 
         private void backgroundWorker2_DoWork(object sender, DoWorkEventArgs e)
         {
-            IO.ReceiveFromServer();
+            BackgroundWorker worker = sender as BackgroundWorker;
+
+            if (!worker.CancellationPending && Client.client?.Connected == true)
+            {
+                try
+                {
+                    IO.ReceiveFromServer();
+                }
+                catch (Exception)
+                {
+                    Invoke(new MethodInvoker(delegate ()
+                    {
+                        if (!IsSrv)
+                        {
+                            MessageBox.Show("Failed to send message. Connection lost.", "Error",
+                                MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        }
+
+                        lblStatus.Font = new Font(lblStatus.Font.Name, 28);
+                        lblStatus.ForeColor = Color.Black;
+                        lblStatus.Text = "OR";
+                        EnableDisableControls(false, false);
+                        Text = "Chat Client/Server";
+
+                        try
+                        {
+                            Program.STW?.Close();
+                            Program.STR?.Close();
+                            Client.client?.Close();
+                            Client.client = null;
+                        }
+                        catch { }
+                    }));
+                }
+            }
+
+            if (worker.CancellationPending)
+            {
+                e.Cancel = true;
+            }
         }
 
         private void notifyIcon1_MouseClick(object sender, MouseEventArgs e)
@@ -191,10 +265,7 @@ namespace ChatClientServer
 
         private void btnSrvStop_Click(object sender, EventArgs e)
         {
-            //MessageBox.Show("Server stopped", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            //EnableDisableControls(false, true);
-
-            //Commented out for now - reason: actually stop the server on clicking this button
+            Server.StopSrv();
         }
 
         private void btnConnect_Click(object sender, EventArgs e)

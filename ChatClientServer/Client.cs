@@ -15,39 +15,35 @@ namespace ChatClientServer
         public static void ConnectToSrv()
         {
             client = new TcpClient();
-
             try
             {
                 IPEndPoint ipEndPoint = new IPEndPoint(IPAddress.Parse(form.textBoxClientIP.Text), int.Parse(form.textBoxClientPort.Text));
-
                 client.Connect(ipEndPoint);
-
                 Program.STW = new StreamWriter(client.GetStream());
                 Program.STR = new StreamReader(client.GetStream());
                 Program.STW.AutoFlush = true;
-
                 form.backgroundWorker1.RunWorkerAsync();
-                form.backgroundWorker2.WorkerSupportsCancellation = true;
 
                 form.lblStatus.Font = new Font(form.lblStatus.Font.Name, 20);
                 form.lblStatus.ForeColor = Color.Green;
                 form.lblStatus.Text = "Connected to\n" + form.textBoxClientIP.Text + ":" + form.textBoxClientPort.Text;
 
-                if (form.textBoxClientIP.Text != "127.0.0.1")
+                bool isServerSelfConnection = (form.textBoxClientIP.Text == "127.0.0.1" &&
+                                             form.textBoxSrvPort.Text == form.textBoxClientPort.Text);
+
+                if (isServerSelfConnection)
                 {
-                    form.EnableDisableControls(true, false);
+                    form.EnableDisableControls(true, true);
                 }
                 else
                 {
-                    form.EnableDisableControls(true, true);
+                    form.EnableDisableControls(true, false);
                 }
 
                 MessageBox.Show("Connected to\n" + form.textBoxClientIP.Text + ":" + form.textBoxClientPort.Text, "Success",
                     MessageBoxButtons.OK, MessageBoxIcon.Information);
-
                 form.tabControl1.SelectedIndex = 1;
             }
-
             catch
             {
                 MessageBox.Show("Invalid IP address\n\nCould not connect to server", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);

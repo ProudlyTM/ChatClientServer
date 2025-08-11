@@ -5,6 +5,7 @@ using System.Drawing;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Net.Sockets;
 using System.Windows.Forms;
 
 namespace ChatClientServer
@@ -253,59 +254,107 @@ namespace ChatClientServer
 
         public static void ReceiveFromClient()
         {
-            while (Client.client.Connected)
+            try
             {
-                try
+                if (Client.client?.Connected == true)
                 {
-                    Program.receive = Program.STR.ReadLine();
-                    string receiveFormatted = $"[{DateTime.Now.ToString(localDateTimeFormat)}]\n{Program.receive}\n\n";
+                    Program.receive = Program.STR?.ReadLine();
 
-                    form.textBoxChatScreen.Invoke(new MethodInvoker(delegate ()
+                    if (Program.receive == null)
                     {
-                        form.textBoxChatScreen.AppendText(receiveFormatted);
-
-                        if (File.ReadLines(Program.chatHistory).First() != "control_line_DO_NOT_DELETE")
+                        form.Invoke(new MethodInvoker(delegate ()
                         {
-                            string encryptedBuffer = File.ReadAllText(Program.chatHistory);
+                            if (!form.IsSrv)
+                            {
+                                MessageBox.Show("Connection to server lost", "Connection Lost",
+                                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                            }
+
+                            form.lblStatus.Font = new Font(form.lblStatus.Font.Name, 28);
+                            form.lblStatus.ForeColor = Color.Black;
+                            form.lblStatus.Text = "OR";
+                            form.EnableDisableControls(false, false);
+                            form.Text = "Chat Client/Server";
 
                             try
                             {
-                                Program.decryptedBuffer = Crypto.Decrypt(encryptedBuffer, formPassword.textBoxPassword.Text) + receiveFormatted;
+                                Program.STW?.Close();
+                                Program.STR?.Close();
+                                Client.client?.Close();
+                                Client.client = null;
                             }
-                            catch
-                            {
-                                Program.decryptedBuffer = encryptedBuffer;
-                            }
+                            catch { }
+                        }));
+                        return;
+                    }
 
-                            Program.encryptedText = Crypto.Encrypt(Program.decryptedBuffer, formPassword.textBoxPassword.Text);
-
-                            using (StreamWriter sw = File.CreateText(Program.chatHistory))
-                            {
-                                sw.Write(Program.encryptedText);
-                            }
-                        }
-                        else
+                    if (!string.IsNullOrEmpty(Program.receive))
+                    {
+                        string receiveFormatted = $"[{DateTime.Now.ToString(localDateTimeFormat)}]\n{Program.receive}\n\n";
+                        form.textBoxChatScreen.Invoke(new MethodInvoker(delegate ()
                         {
-                            using (StreamWriter sw = File.AppendText(Program.chatHistory))
+                            form.textBoxChatScreen.AppendText(receiveFormatted);
+
+                            if (File.ReadLines(Program.chatHistory).First() != "control_line_DO_NOT_DELETE")
                             {
-                                sw.Write(receiveFormatted);
+                                string encryptedBuffer = File.ReadAllText(Program.chatHistory);
+                                try
+                                {
+                                    Program.decryptedBuffer = Crypto.Decrypt(encryptedBuffer, formPassword.textBoxPassword.Text) + receiveFormatted;
+                                }
+                                catch
+                                {
+                                    Program.decryptedBuffer = encryptedBuffer;
+                                }
+                                Program.encryptedText = Crypto.Encrypt(Program.decryptedBuffer, formPassword.textBoxPassword.Text);
+                                using (StreamWriter sw = File.CreateText(Program.chatHistory))
+                                {
+                                    sw.Write(Program.encryptedText);
+                                }
                             }
-                        }
+                            else
+                            {
+                                using (StreamWriter sw = File.AppendText(Program.chatHistory))
+                                {
+                                    sw.Write(receiveFormatted);
+                                }
+                            }
 
-                        if (form.WindowState == FormWindowState.Minimized)
-                        {
-                            form.FlashNotification();
-                        }
-                    }));
-
+                            if (form.WindowState == FormWindowState.Minimized)
+                            {
+                                form.FlashNotification();
+                            }
+                        }));
+                    }
                     Program.receive = "";
                 }
-
-                catch
+            }
+            catch (Exception)
+            {
+                form.Invoke(new MethodInvoker(delegate ()
                 {
-                    MessageBox.Show("Lost connection to remote endpoint", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    Application.Restart();
-                }
+                    if (!form.IsSrv)
+                    {
+                        MessageBox.Show("Connection to server lost", "Connection Lost",
+                            MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    }
+
+                    form.lblStatus.Font = new Font(form.lblStatus.Font.Name, 28);
+                    form.lblStatus.ForeColor = Color.Black;
+                    form.lblStatus.Text = "OR";
+                    form.EnableDisableControls(false, false);
+                    form.Text = "Chat Client/Server";
+
+                    try
+                    {
+                        Program.STW?.Close();
+                        Program.STR?.Close();
+                        Client.client?.Close();
+                        Client.client = null;
+                    }
+                    catch { }
+                }));
+                return;
             }
         }
 
@@ -353,17 +402,69 @@ namespace ChatClientServer
         {
             try
             {
-                if (Client.client.Connected && form.richTextBoxChatInput.Text != "")
+                if (Client.client?.Connected == true && form.richTextBoxChatInput.Text != "")
                 {
+                    if (Client.client.Client.Poll(0, System.Net.Sockets.SelectMode.SelectRead))
+                    {
+                        byte[] buff = new byte[1];
+                        if (Client.client.Client.Receive(buff, SocketFlags.Peek) == 0)
+                        {
+                            if (!form.IsSrv)
+                            {
+                                MessageBox.Show("Connection to server lost", "Connection Lost",
+                                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                            }
+
+                            form.lblStatus.Font = new Font(form.lblStatus.Font.Name, 28);
+                            form.lblStatus.ForeColor = Color.Black;
+                            form.lblStatus.Text = "OR";
+                            form.EnableDisableControls(false, false);
+                            form.Text = "Chat Client/Server";
+
+                            try
+                            {
+                                Program.STW?.Close();
+                                Program.STR?.Close();
+                                Client.client?.Close();
+                                Client.client = null;
+                            }
+                            catch { }
+                            return;
+                        }
+                    }
+
                     Program.textToSend = form.richTextBoxChatInput.Text;
                     form.backgroundWorker2.RunWorkerAsync();
                     form.richTextBoxChatInput.Text = "";
                 }
+                else if (Client.client?.Connected != true)
+                {
+                    MessageBox.Show("Not connected to server", "Error",
+                        MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
             }
-            catch
+            catch (Exception)
             {
-                MessageBox.Show("Failed to send message. Reason:\n\nNo connection to remote endpoint.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                form.richTextBoxChatInput.Text = "";
+                if (!form.IsSrv)
+                {
+                    MessageBox.Show("Failed to send message. Connection lost.", "Error",
+                        MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+
+                form.lblStatus.Font = new Font(form.lblStatus.Font.Name, 28);
+                form.lblStatus.ForeColor = Color.Black;
+                form.lblStatus.Text = "OR";
+                form.EnableDisableControls(false, false);
+                form.Text = "Chat Client/Server";
+
+                try
+                {
+                    Program.STW?.Close();
+                    Program.STR?.Close();
+                    Client.client?.Close();
+                    Client.client = null;
+                }
+                catch { }
             }
         }
     }
