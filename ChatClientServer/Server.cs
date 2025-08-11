@@ -79,6 +79,8 @@ namespace ChatClientServer
                         "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     form.Text = $"Chat Client/Server ({port})";
 
+                    IO.AddOrUpdateAppSettings("SrvPort", port.ToString());
+
                     // Connect the server to itself as a client so it can also chat
                     string localIP = "127.0.0.1";
                     int localPort = int.Parse(form.textBoxSrvPort.Text);
