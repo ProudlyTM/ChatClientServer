@@ -26,7 +26,6 @@ namespace ChatClientServer
 
                 form.lblStatus.Font = new Font(form.lblStatus.Font.Name, 20);
                 form.lblStatus.ForeColor = Color.Green;
-                form.lblStatus.Text = "Connected to\n" + form.textBoxClientIP.Text + ":" + form.textBoxClientPort.Text;
 
                 bool isServerSelfConnection = (form.textBoxClientIP.Text == "127.0.0.1" &&
                                              form.textBoxSrvPort.Text == form.textBoxClientPort.Text);
@@ -37,6 +36,7 @@ namespace ChatClientServer
                 }
                 else
                 {
+                    form.lblStatus.Text = "Connected to\n" + form.textBoxClientIP.Text + ":" + form.textBoxClientPort.Text;
                     form.EnableDisableControls(true, false);
                 }
 
