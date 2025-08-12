@@ -18,7 +18,8 @@ namespace ChatClientServer
         private static TcpListener listener;
         private static readonly List<TcpClient> connectedClients = new List<TcpClient>();
         private static readonly object clientLock = new object();
-        private static bool isSrvRunning = false;
+
+        public static bool isSrvRunning = false;
 
         public static void StartSrv()
         {

@@ -276,10 +276,7 @@ namespace ChatClientServer
 
         private void btnDisconnect_Click(object sender, EventArgs e)
         {
-            //MessageBox.Show("Disconnected from server", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            //EnableDisableControls(false, false);
-
-            //Commented out for now - reason: actually disconnect from server on clicking this button
+            Client.DisconnectFromSrv();
         }
 
         private void btnSendMsg_Click(object sender, EventArgs e)

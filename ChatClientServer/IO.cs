@@ -264,7 +264,7 @@ namespace ChatClientServer
                     {
                         form.Invoke(new MethodInvoker(delegate ()
                         {
-                            if (!form.IsSrv)
+                            if (!form.IsSrv && !Client.IsIntentionalDisconnect())
                             {
                                 MessageBox.Show("Connection to server lost", "Connection Lost",
                                     MessageBoxButtons.OK, MessageBoxIcon.Warning);
@@ -333,7 +333,7 @@ namespace ChatClientServer
             {
                 form.Invoke(new MethodInvoker(delegate ()
                 {
-                    if (!form.IsSrv)
+                    if (!form.IsSrv && !Client.IsIntentionalDisconnect())
                     {
                         MessageBox.Show("Connection to server lost", "Connection Lost",
                             MessageBoxButtons.OK, MessageBoxIcon.Warning);
@@ -409,7 +409,7 @@ namespace ChatClientServer
                         byte[] buff = new byte[1];
                         if (Client.client.Client.Receive(buff, SocketFlags.Peek) == 0)
                         {
-                            if (!form.IsSrv)
+                            if (!form.IsSrv && !Client.IsIntentionalDisconnect())
                             {
                                 MessageBox.Show("Connection to server lost", "Connection Lost",
                                     MessageBoxButtons.OK, MessageBoxIcon.Warning);
@@ -445,7 +445,7 @@ namespace ChatClientServer
             }
             catch (Exception)
             {
-                if (!form.IsSrv)
+                if (!form.IsSrv && !Client.IsIntentionalDisconnect())
                 {
                     MessageBox.Show("Failed to send message. Connection lost.", "Error",
                         MessageBoxButtons.OK, MessageBoxIcon.Error);
