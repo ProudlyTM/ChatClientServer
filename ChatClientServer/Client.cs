@@ -57,6 +57,9 @@ namespace ChatClientServer
                 {
                     form.lblStatus.Text = "Connected to\n" + form.textBoxClientIP.Text + ":" + form.textBoxClientPort.Text;
                     form.EnableDisableControls(true, false);
+
+                    IO.AddOrUpdateAppSettings("ClientIP", form.textBoxClientIP.Text);
+                    IO.AddOrUpdateAppSettings("ClientPort", form.textBoxClientPort.Text);
                 }
 
                 MessageBox.Show("Connected to\n" + form.textBoxClientIP.Text + ":" + form.textBoxClientPort.Text, "Success",

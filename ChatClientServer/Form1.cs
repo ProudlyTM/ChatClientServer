@@ -122,6 +122,8 @@ namespace ChatClientServer
             backgroundWorker2.WorkerSupportsCancellation = true;
 
             IO.ChatHistoryFileCheck();
+            textBoxClientIP.Text = ConfigurationManager.AppSettings["ClientIP"];
+            textBoxClientPort.Text = ConfigurationManager.AppSettings["ClientPort"];
             textBoxSrvPort.Text = ConfigurationManager.AppSettings["SrvPort"];
             IO.GenOrLoadNick();
         }
