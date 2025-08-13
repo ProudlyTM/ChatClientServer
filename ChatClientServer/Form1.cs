@@ -95,6 +95,48 @@ namespace ChatClientServer
             }
         }
 
+        /// Credits to Positive Tinker for the method
+        /// https://positivetinker.com/adding-ctrl-a-and-ctrl-backspace-support-to-the-winforms-textbox-control
+        ///
+        /// <summary>
+        /// Adds support for the following TextBox key commands:
+        /// CTRL+A (Select All)
+        /// CTRL+Backspace (Delete Previous Word)
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void TextBox_KeyDown_CommonKeyCommands(object sender, KeyEventArgs e)
+        {
+            var textbox = (sender as TextBox);
+            if (textbox == null)
+                return;
+
+            // Add support for CTRL+A
+            if (e.Control && e.KeyCode == Keys.A)
+            {
+                textbox.SelectAll();
+                e.Handled = true;
+            }
+
+            // Add support for CTRL+Backspace
+            if (e.Control && e.KeyCode == Keys.Back)
+            {
+                e.SuppressKeyPress = true;
+                if (textbox.SelectionStart > 0)
+                {
+                    /*
+                     * Piggyback off of the supported "CTRL + Left Cursor" feature.
+                     * Does not need to send {CTRL}, because the user is currently holding {CTRL}.
+                     * Uses {DEL} rather than {BKSP} in order to avoid creating an infinite loop.
+                     * NOTE: {DEL} has the side effect of deleting text to the right if the cursor is
+                     * already as far left as it can go, since no text will be selected by {LEFT}.
+                     * The .SelectionStart > 0 condition prevents this side effect.
+                     */
+                    SendKeys.Send("+{LEFT}{DEL}");
+                }
+            }
+        }
+
         private void ExitApplication(object sender, EventArgs e)
         {
             notifyIcon1.Visible = false;
@@ -325,7 +367,7 @@ namespace ChatClientServer
             textBoxChatScreen.ScrollToCaret();
         }
 
-        private void textBoxClientIPPort_KeyPress(object sender, KeyPressEventArgs e)
+        private void textBoxClientIP_KeyPress(object sender, KeyPressEventArgs e)
         {
             if (e.KeyChar == (char)Keys.Enter)
             {
@@ -337,20 +379,94 @@ namespace ChatClientServer
             }
         }
 
-        private void textBoxSrvPort_KeyPress(object sender, KeyPressEventArgs e)
+        private void textBoxClientPort_KeyPress(object sender, KeyPressEventArgs e)
         {
-            if (!(char.IsDigit(e.KeyChar) || e.KeyChar == (char)Keys.Back))
+            if (char.IsControl(e.KeyChar))
+            {
+                if (e.KeyChar == (char)Keys.Enter)
+                {
+                    if (textBoxClientIP.Text != "" && textBoxClientPort.Text != "")
+                    {
+                        e.Handled = true;
+                        btnConnect.PerformClick();
+                    }
+                }
+                return;
+            }
+
+            if (!char.IsDigit(e.KeyChar))
             {
                 e.Handled = true;
             }
+        }
 
-            if (e.KeyChar == (char)Keys.Enter)
+        private void textBoxSrvPort_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (char.IsControl(e.KeyChar))
             {
-                if (textBoxSrvPort.Text != "")
+                if (e.KeyChar == (char)Keys.Enter)
                 {
-                    Program.srvPort = textBoxSrvPort.Text;
-                    e.Handled = true;
-                    btnSrvStart.PerformClick();
+                    if (textBoxSrvPort.Text != "")
+                    {
+                        Program.srvPort = textBoxSrvPort.Text;
+                        e.Handled = true;
+                        btnSrvStart.PerformClick();
+                    }
+                }
+                return;
+            }
+
+            if (!char.IsDigit(e.KeyChar))
+            {
+                e.Handled = true;
+            }
+        }
+
+        private void textBoxClientIP_KeyDown(object sender, KeyEventArgs e)
+        {
+            TextBox_KeyDown_CommonKeyCommands(sender, e);
+        }
+
+        private void textBoxClientPort_KeyDown(object sender, KeyEventArgs e)
+        {
+            TextBox_KeyDown_CommonKeyCommands(sender, e);
+
+            if (e.Control && e.KeyCode == Keys.V)
+            {
+                string clipboardText = Clipboard.GetText();
+                foreach (char c in clipboardText)
+                {
+                    if (!char.IsDigit(c))
+                    {
+                        e.Handled = true;
+                        e.SuppressKeyPress = true;
+                        MessageBox.Show("Could not paste! Only numbers are allowed! (0-9)", "Error",
+                            MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        textBoxClientPort.Text = "";
+                        return;
+                    }
+                }
+            }
+        }
+
+        private void textBoxSrvPort_KeyDown(object sender, KeyEventArgs e)
+        {
+            TextBox_KeyDown_CommonKeyCommands(sender, e);
+
+            if (e.Control && e.KeyCode == Keys.V)
+            {
+                string clipboardText = Clipboard.GetText();
+                foreach (char c in clipboardText)
+                {
+                    if (!char.IsDigit(c))
+                    {
+                        e.Handled = true;
+                        e.SuppressKeyPress = true;
+                        MessageBox.Show("Could not paste! Only numbers are allowed! (0-9)", "Error",
+                            MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        textBoxSrvPort.Text = "";
+                        return;
+                    }
                 }
             }
         }

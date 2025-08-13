@@ -144,7 +144,8 @@
             this.textBoxClientPort.Name = "textBoxClientPort";
             this.textBoxClientPort.Size = new System.Drawing.Size(59, 26);
             this.textBoxClientPort.TabIndex = 5;
-            this.textBoxClientPort.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textBoxClientIPPort_KeyPress);
+            this.textBoxClientPort.KeyDown += new System.Windows.Forms.KeyEventHandler(this.textBoxClientPort_KeyDown);
+            this.textBoxClientPort.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textBoxClientPort_KeyPress);
             // 
             // lblPort
             // 
@@ -161,10 +162,12 @@
             this.textBoxClientIP.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.textBoxClientIP.Location = new System.Drawing.Point(39, 26);
+            this.textBoxClientIP.MaxLength = 253;
             this.textBoxClientIP.Name = "textBoxClientIP";
             this.textBoxClientIP.Size = new System.Drawing.Size(136, 26);
             this.textBoxClientIP.TabIndex = 4;
-            this.textBoxClientIP.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textBoxClientIPPort_KeyPress);
+            this.textBoxClientIP.KeyDown += new System.Windows.Forms.KeyEventHandler(this.textBoxClientIP_KeyDown);
+            this.textBoxClientIP.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textBoxClientIP_KeyPress);
             // 
             // btnConnect
             // 
@@ -249,10 +252,10 @@
             this.textBoxSrvPort.Location = new System.Drawing.Point(216, 26);
             this.textBoxSrvPort.MaxLength = 5;
             this.textBoxSrvPort.Name = "textBoxSrvPort";
-            this.textBoxSrvPort.ShortcutsEnabled = false;
             this.textBoxSrvPort.Size = new System.Drawing.Size(59, 22);
             this.textBoxSrvPort.TabIndex = 6;
             this.textBoxSrvPort.TextChanged += new System.EventHandler(this.textBoxSrvPort_TextChanged);
+            this.textBoxSrvPort.KeyDown += new System.Windows.Forms.KeyEventHandler(this.textBoxSrvPort_KeyDown);
             this.textBoxSrvPort.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textBoxSrvPort_KeyPress);
             // 
             // btnSrvStart
